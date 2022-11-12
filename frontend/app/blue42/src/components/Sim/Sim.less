@@ -1,0 +1,87 @@
+.Sim {
+    width: 70vw;
+    height: 93vh;
+    color: white;
+    margin: 7vh 15vw 0 15vw;
+
+    .SimViewControls{
+        background-color: #271b2f;
+        margin-top: 1em;
+        border-radius: 8px !important;
+        padding: .65em;
+        position: relative;
+
+        div{
+            display: inline-block;
+            position: relative;
+        }
+    }
+
+    .FootballImageContainer{
+        border-radius: 8px !important;
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 140px;
+        padding: 0 20px;
+        overflow: hidden;
+        border-radius: 6px;
+
+        .NFLIconContainer{
+            a{
+                display: block;
+                height: 80px;
+                width: 80px;
+                display: flex;
+                align-items: center;
+
+                .NFLIcon{
+                    position: absolute;
+                    right: 0;
+                    transform: scale(.7);
+                    padding-right: 1em;
+                }
+            }
+        }
+
+        .FootballIconLabel{
+            position: absolute;
+            font-family: GTF, sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            padding-left: 2ch;
+        }
+
+        .FootballImage{
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            height: 100%; 
+            width: 100%;
+            top: 0;
+            left: 0;
+            position: absolute;
+            background-image: url(../../assets/images/Football_blurred.jpg);
+            background-color: #271b2f;
+            background-size: contain;
+            background-position: center;
+        }
+        .FootballImage::before{
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 38%;
+            background: linear-gradient(90deg, var(--bg-main-layouts), 83%, transparent);
+        }
+        .FootballImage::after{
+            content: "";
+            right: 0;
+            transform: rotate(180deg);
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 38%;
+            background: linear-gradient(90deg, var(--bg-main-layouts), 83%, transparent);
+        }
+    }
+}
