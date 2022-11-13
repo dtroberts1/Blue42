@@ -8,7 +8,6 @@ import tbIcon from '../../assets/team-icons/TBB.png';
 import ssIcon from '../../assets/team-icons/SS.png';
 
 const AllEventsOverviewOddsCard = styled.div`
-background: #271b2f;
 padding: .6em 1.4em;
 font-size: .9rem;
 border-radius: 8px;
@@ -16,10 +15,12 @@ position: relative;
 width: 2.6em;
 height: 2.5em;
 filter: brightness(${(props) => (props.odds.isActive ? 1.8 : 1)});
+background: ${(props) => (props.odds.isActive ? 'linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important' : '#271b2f')};
 
 &:hover{
     filter: brightness(1.8);
     cursor: pointer;
+    background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important
 }
 
 &::before{
@@ -31,9 +32,6 @@ filter: brightness(${(props) => (props.odds.isActive ? 1.8 : 1)});
     text-align: center;
     font-weight: 500;
 
-    &:hover{
-    filter: brightness(1);
-  }
 }
 
 &::after{
@@ -45,9 +43,6 @@ filter: brightness(${(props) => (props.odds.isActive ? 1.8 : 1)});
   text-align: center;
   font-weight: 500;
 
-  &:hover{
-    filter: brightness(1);
-  }
 }
 
 }`;
