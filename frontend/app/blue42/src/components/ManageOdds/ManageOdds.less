@@ -1,0 +1,141 @@
+.ManageOdds {
+    width: 15vw;
+    height: 93vh;
+    color: white;
+    position: absolute;
+    top: 7vh;
+    right: 0;
+
+    .ManageOddsContainer{
+        background: #271b2f;
+        height: 20em;
+        border-radius: 8px;
+        margin: 0 1em 1em 1em;
+        padding: .4em .9em;
+
+        .CreateBtn{
+            background-color: #7747e5;
+            border-radius: 8px;
+            line-height: 1.9em;
+            font-size: 1.1rem;
+            text-align: center;
+            position: relative;
+            width: initial;
+            height: initial;
+            padding: 0.2em;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        .ManageOddsContainerTab{
+            width: 50%;
+            text-align: center;
+            padding: .4em;
+            box-sizing: border-box;
+            font-family: GTF, sans-serif;
+            line-height: 2rem;
+            font-size: .94rem;
+            font-weight: 700;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        .ManageOddsBody{
+            height: calc(100% - 3.9em);
+            position: absolute;
+            top: 3.3em;
+            box-sizing: border-box;
+            width: calc(100% - 1.6em);
+            left: .8em;
+            border-radius: 10px;
+            padding: .6em;
+            background: #3A2334;
+        }
+    }
+}
+
+.CreationModalOverlay{
+    position: fixed;
+    inset: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.CreationModalPortal{
+    background: red;
+}
+
+.CreationModalContent{
+    position: absolute;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+    height: 60vh;
+    width: 50vw;
+    left: 25vw;
+    top: 15vh;
+    box-shadow: 0 5px 8px 0 rgba(119,71,229,0.2), 0 7px 20px 0 rgba(119,71,229);
+    animation-name: modalOpen;
+    animation-duration: 1s;
+
+    .ModalHeader{
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 3.2rem;
+        width: 100%;
+        background: #7747e5;
+        color: white;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 2.8rem;
+
+        .ExitModalBtnContainer{
+            position: absolute;
+            right: 0;
+            margin-right: .4em;
+
+            .ExitModalBtn{
+                position: relative;
+                font-size: 1.5rem;
+                border-radius: 50%;
+                width: 34px;
+                height: 34px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover{
+                    cursor: pointer;
+                    background: rgba(255,255,255,.2);
+                }
+                div{
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .ModalBody1{
+        background: url(../../assets/images/blue42background.webp);
+        height: calc(100% - 3.2rem);
+        position: absolute;
+        left: 0;
+        top: 3.2rem;
+        width: 100%;
+    }
+}
+
+
+@keyframes modalOpen{
+    from{opacity: 0}
+    to{opacity: 1}
+}
