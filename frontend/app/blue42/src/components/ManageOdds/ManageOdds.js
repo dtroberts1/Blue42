@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ManageOdds.less';
 import ReactModal from 'react-modal';
+import GenericModal from '../GenericModal/GenericModal';
 
 class ManageOdds extends React.Component{
   constructor(props){
@@ -22,15 +23,14 @@ class ManageOdds extends React.Component{
     this.setState((state, props) => ({
       createModalIsVisible: true
     }));
-    }
+  }
 
-    closeCreateModal(){
-      console.log("in close create modal");
+  closeCreateModal(){
 
-      this.setState((state, props) => ({
-        createModalIsVisible: false
-      }));
-    }
+    this.setState((state, props) => ({
+      createModalIsVisible: false
+    }));
+  }
 
   render(){
     return(
@@ -54,49 +54,12 @@ class ManageOdds extends React.Component{
         <div className={styles.ManageOddsContainer} style={{height: '1.5em'}}>
           SettingsContainer
         </div>
-        <ReactModal
-          onRequestClose={(event) => {this.closeCreateModal()}}
-          isOpen={this.state.createModalIsVisible} 
-          overlayClassName={styles.CreationModalOverlay}
-          portalClassName={styles.CreationModalPortal}
-          className={styles.CreationModalContent}
-          ariaHideApp={
-            true
-          /* Boolean indicating if the appElement should be hidden */}
-          shouldFocusAfterRender={
-            true
-          /* Boolean indicating if the modal should be focused after render. */}
-
-          shouldCloseOnOverlayClick={
-            true
-          /* Boolean indicating if the overlay should close the modal */}
-
-          shouldCloseOnEsc={
-            true
-          /* Boolean indicating if pressing the esc key should close the modal
-            Note: By disabling the esc key from closing the modal
-            you may introduce an accessibility issue. */}
-
-          shouldReturnFocusAfterClose={
-            true
-          /* Boolean indicating if the modal should restore focus to the element
-            that had focus prior to its display. */}
-        >
-          <div className={styles.ModalHeader}>
-            Create 
-            <div className={styles.ExitModalBtnContainer}>
-              <div tabIndex="1" onClick={(event) => {this.closeCreateModal()}}
-                className={styles.ExitModalBtn}>
-                <div>
-                  X
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.ModalBody1}>
-            Body
-          </div>
-        </ReactModal>
+        {this.state.createModalIsVisible && 
+          <GenericModal
+            onCloseModal={(evt) => {this.closeCreateModal()}}
+            title="Create Odds"
+          />
+        }
       </div>
     );
   }

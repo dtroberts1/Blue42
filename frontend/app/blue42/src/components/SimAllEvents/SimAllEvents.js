@@ -6,6 +6,7 @@ import nflIcon from '../../assets/images/nfl_logo.png';
 import styled from 'styled-components';
 import tbIcon from '../../assets/team-icons/TBB.png';
 import ssIcon from '../../assets/team-icons/SS.png';
+import GenericModal from '../GenericModal/GenericModal';
 
 const AllEventsOverviewOddsCard = styled.div`
 padding: .6em 1.4em;
@@ -53,6 +54,7 @@ class SimAllEvents extends React.Component{
     super(props);
     this.state = {
       selectedOdd: null,
+      createEventModalIsVisible: false,
       testData : {
         category1Header: 'Winner. Half 1',
         category2Header: 'Total. Half 1',
@@ -98,6 +100,19 @@ class SimAllEvents extends React.Component{
         ]
       }
     }
+  }
+
+  openCreateGameModal(){
+    this.setState((state, props) => ({
+      createEventModalIsVisible: true
+    }));
+  }
+
+  
+  closeCreateModal(){
+    this.setState((state, props) => ({
+      createEventModalIsVisible: false
+    }));
   }
 
   clickedOddsCard(index, event){
@@ -196,6 +211,16 @@ class SimAllEvents extends React.Component{
             </div>
           </div>
         </div>
+        <div tabIndex="1" onClick={(event) => {this.openCreateGameModal()}} className={styles.CreateGameModalBtn}>
+          Create Event
+        </div>
+        {
+          this.state.createEventModalIsVisible &&
+            <GenericModal
+            onCloseModal={(evt) => {this.closeCreateModal()}}
+            title="Create Game"
+            />
+        }
       </div>
     ); 
   }
