@@ -2,3 +2,59 @@
     width: 100%;
     height: 100%;
 }
+
+.ImgSelectorContainer{
+    width: 30ch;
+    padding-left: 4em;
+
+    .ImgSelectorList{
+        list-style: none;
+        max-height: 5em;
+        overflow-y: auto;
+        padding: 0;
+        .ImgSelectorItem{
+            width: 100%;
+            height: 2.7em;
+            background: white;
+            color: black;
+
+            &:hover{
+                cursor: pointer;
+                background: rgba(255,255,255, 0.8);
+            }
+
+            .ImgSelectorItemContainer{
+                height: 100%;
+                width: 100%;
+                padding: 0 0.4em;
+                box-sizing: border-box;
+                .ImgSelectorItemImg{
+                    width: 2em;
+                    float: left;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
+                .ImgSelectorItemValue{
+                    display: flex;
+                    align-items: center;
+                    width: calc(100% - 2em);
+                    height: 100%;
+                    float: right;
+                    padding-left: .5em;
+                    box-sizing: border-box;
+                    div{
+                        max-width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ToolTipClass{
+    background-color: #7747e5 !important;
+}
