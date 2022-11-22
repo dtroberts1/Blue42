@@ -1,8 +1,29 @@
 .GenericDropdown {
 
 }
+
 .ImgSelectorContainer{
-    width: 34ch;
+
+    width: 20em;
+    position: relative;
+
+    .DropdownLabel{
+        position: absolute;
+        color: white;
+        filter: brightness(4.2);
+        left: .34em;
+        top: 2em;
+        opacity: 0;
+        transition: top 1s, opacity 1s;
+    }
+
+        
+    &:hover{
+        .DropdownLabel{
+            top: 0.12em;
+            opacity: 1;
+        }
+    }
 
     .ImgSelectorList{
         list-style: none;
@@ -45,7 +66,8 @@
     height: 2.7em !important;
     color: black;
     display: flex;
-    position: relative;
+    min-height: 4em !important;
+    padding-top: 1em !important;
 
     .DropdownArrow{
         width:2em;
@@ -83,6 +105,7 @@
     border-bottom: inset 2px;
     background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important;
     color: white;
+    border-radius: 6px;
 
     .ImgSelectorItemImg{
         width: 2em;

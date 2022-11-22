@@ -1,8 +1,38 @@
 .CreateGameModalContent {
     width: 100%;
     height: 100%;
-}
+    .SectionSeparator{
 
-.MyCustomGenericDropdownClass{
-    margin-left:50em;
+        &::after{
+            content: '';
+            position: absolute;
+            top: 8.3em;   
+            left: 0;
+            width: 100%;
+            height: 5px;
+            border-bottom: inset 1px #7747e5;
+        }
+    }
+    .CompetitorDropdown{
+        margin-left: 2em;
+        background: linear-gradient(90deg, rgba(55, 0, 179, 1) 0%, rgba(98, 41, 229, 1) 100%), rgba(255, 255, 255, 1) !important;
+        width: 20em;
+        height: fit-content;
+    }    
+
+    .SectionLabel{
+        font-size: 1.14rem;
+        padding-left: 1.3em;
+        padding-top: 0.8em;
+    }
+
+    .Section{
+        font-size: 1.14rem;
+        padding-left: 1.3em;
+        padding-top: 2em;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
 }

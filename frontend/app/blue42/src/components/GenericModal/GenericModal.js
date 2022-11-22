@@ -53,14 +53,16 @@ class GenericModal extends React.Component{
           </div>
         </div>
         <div className={styles.ModalBody1}>
-          {
-            this.props.title === 'Create Odds' &&
-            <CreateOddsModalContent />
-          }
-          {
-            this.props.title === 'Create Game' &&
-            <CreateGameModalContent />
-          }
+          <div style={{width: '100%', height: '100%', position: 'relative'}}>
+            {
+              this.props.title === 'Create Odds' &&
+              <CreateOddsModalContent />
+            }
+            {
+              this.props.title === 'Create Game' &&
+              <CreateGameModalContent />
+            }
+          </div>
         </div>
       </ReactModal>
     )

@@ -39,6 +39,11 @@ class GenericDropdown extends React.Component{
       dataDropdownExpanded: false,
       selectedEntity: this.props.data.find((currItm) =>  currItm.name === itm.name)
     }));
+
+    // Emit event for parent
+    if (this.props.handleSelectedEntity){
+      this.props.handleSelectedEntity(itm);
+    }
   }
 
   dataListItems(params) {
@@ -67,13 +72,18 @@ class GenericDropdown extends React.Component{
   render(){
     return(
       <div onBlur={(evt) => {this.dataDropdownBlurred()}} tabIndex="1" className={styles.ImgSelectorContainer + ' ' + this.props.customClass}>
+        <div className={styles.DropdownLabel}>
+          {this.props.labelName}
+        </div>
         <div 
           onClick={(evt) => {this.toggleDataDropdown()}}
           style={{borderBottom: this.state.dataDropdownExpanded ? 'inset 2px' : 'unset'}}
           className={styles.CustomGenericListBtn + ' ' + styles.ImgSelectorItemContainer}>
           <div className={styles.ImgSelectorItemImg}><img src={acImage}/></div>
-          <div className={styles.ImgSelectorItemValue}><div data-tip={this.state.selectedEntity.name} data-class={styles.ToolTipClass}>{this.state.selectedEntity.name} <ReactTooltip /></div> 
-          <IoMdArrowDropdown className={styles.DropdownArrow + ' ' + (this.state.dataDropdownExpanded ? styles.DropdownArrowRotate : styles.DropdownUnRotate)}/>
+          <div className={styles.ImgSelectorItemValue}><div data-tip={this.state.selectedEntity.name} data-class={styles.ToolTipClass}>{this.state.selectedEntity.name} <ReactTooltip /></div>
+          <div style={{height: '100%'}}>
+            <IoMdArrowDropdown className={styles.DropdownArrow + ' ' + (this.state.dataDropdownExpanded ? styles.DropdownArrowRotate : styles.DropdownUnRotate)}/>
+          </div> 
           </div> 
         </div>
         {
@@ -82,7 +92,7 @@ class GenericDropdown extends React.Component{
             {this.state.dataList}
           </ul>
         }
-    </div>
+      </div>
     );
   }
 }
