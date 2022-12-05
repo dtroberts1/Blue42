@@ -6,15 +6,39 @@ import CreateOddsModalContent from '../CreateOddsModalContent/CreateOddsModalCon
 import CreateGameModalContent from '../CreateGameModalContent/CreateGameModalContent';
 import styles from './GenericModal.less';
 
-class GenericModal extends React.Component{
-  constructor(props){
+type Props = {
+  onCloseModal: (promise: any) => void,
+  title: string,
+};
+
+export default class GenericModal extends React.Component{
+  props: Props;
+  constructor(props: Props){
     super(props);
+    this.props = props;
+  }
+
+  handleModalCallback(callBack: (() => Promise<unknown>)){
+    this.props.onCloseModal(callBack)
+    /*
+    if (callBack){
+      console.log("has call back. calling it");
+      callBack
+        .then((res) => {
+          console.log({"res":res})
+          console.log("callback completed.");
+        });
+    }
+    else{
+      console.log("did not return a callback")
+    }
+    */
   }
 
   render(){
     return (
       <ReactModal
-        onRequestClose={(event) => {this.props.onCloseModal()}}
+        onRequestClose={(event) => {this.props.onCloseModal(null)}}
         isOpen={true} 
         overlayClassName={styles.CreationModalOverlay}
         portalClassName={styles.CreationModalPortal}
@@ -44,7 +68,7 @@ class GenericModal extends React.Component{
         <div className={styles.ModalHeader}>
           {this.props.title}
           <div className={styles.ExitModalBtnContainer}>
-            <div tabIndex="1" onClick={(event) => {this.props.onCloseModal()}}
+            <div tabIndex={1} onClick={(event) => {this.props.onCloseModal(null)}}
               className={styles.ExitModalBtn}>
               <div>
                 X
@@ -56,11 +80,11 @@ class GenericModal extends React.Component{
           <div style={{width: '100%', height: '100%', position: 'relative'}}>
             {
               this.props.title === 'Create Odds' &&
-              <CreateOddsModalContent />
+              <CreateOddsModalContent callBack={(promise: (() => Promise<unknown>)) => this.handleModalCallback(promise)} />
             }
             {
               this.props.title === 'Create Game' &&
-              <CreateGameModalContent />
+              <CreateGameModalContent callBack={(promise: (() => Promise<unknown>)) => this.handleModalCallback(promise)} />
             }
           </div>
         </div>
@@ -68,9 +92,3 @@ class GenericModal extends React.Component{
     )
   }
 }
-
-GenericModal.propTypes = {};
-
-GenericModal.defaultProps = {};
-
-export default GenericModal;

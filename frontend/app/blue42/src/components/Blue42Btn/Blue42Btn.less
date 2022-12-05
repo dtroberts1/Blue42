@@ -1,0 +1,45 @@
+.ActionBtn{
+    &:not(.SectionaryBtn){
+        background-color: #7747e5;
+    }
+    &.SectionaryBtn{
+        background-color: goldenrod !important;
+    }
+    border-radius: 8px;
+    line-height: 1.3em;
+    font-size: 1.1rem;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    height: initial;
+    padding: 0.4em 0.9em;
+    box-shadow: 0px 100px 80px rgb(0 0 0 / 3%), 0px 30.15px 24.12px rgb(0 0 0 / 5%), 0px 12.52px 10.02px rgb(0 0 0 / 7%), 0px 4.53px 3.62px rgb(0 0 0 / 10%);
+    transition: height .2s linear,box-shadow .2s linear;
+    will-change: height,box-shadow;
+
+    &:hover{
+        cursor: pointer;
+        &:not(.SectionaryBtn){
+            box-shadow: 0px 0px 12px #7747E5, 0px 3.285px 21.9px rgba(0, 0, 0, 0.1), 0px 10.95px 43.8px rgba(0, 0, 0, 0.25);
+        }
+        &.SectionaryBtn{
+            box-shadow: 0px 0px 12px goldenrod, 0px 3.285px 21.9px rgba(0, 0, 0, 0.1), 0px 10.95px 43.8px rgba(0, 0, 0, 0.25);
+        }
+    }
+    &::before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 12px;
+        padding: 1px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+    }
+}

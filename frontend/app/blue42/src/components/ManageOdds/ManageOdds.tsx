@@ -3,14 +3,30 @@ import PropTypes from 'prop-types';
 import styles from './ManageOdds.less';
 import ReactModal from 'react-modal';
 import GenericModal from '../GenericModal/GenericModal';
+import Blue42Btn from '../Blue42Btn/Blue42Btn'
+import { type } from '@testing-library/user-event/dist/type';
 
-class ManageOdds extends React.Component{
-  constructor(props){
+type Props = {
+  
+};
+
+type State = {
+  selectedTab: string;
+  createModalIsVisible: boolean;
+}
+
+export default class ManageOdds extends React.Component{
+
+  props: Props;
+  state: State;
+
+  constructor(props : Props){
     super(props);
     this.state = {
       selectedTab: 'odds',
       createModalIsVisible: false
     }
+    this.props = props;
   }
 
   componentDidMount(){
@@ -47,9 +63,15 @@ class ManageOdds extends React.Component{
           </div>
         </div>
         <div className={styles.ManageOddsContainer} style={{height: 'initial'}}>
+        {/*
           <div className={styles.CreateBtn} tabIndex="1" onClick={(event) => {this.openCreateModal()}}> 
             Create Odds
-          </div>
+          </div>        
+         */}
+         <div >
+          <Blue42Btn onClick={(event) => {this.openCreateModal()}} btnText={'Create Odds'} />
+         </div>
+
         </div>
         <div className={styles.ManageOddsContainer} style={{height: '1.5em'}}>
           SettingsContainer
@@ -64,9 +86,3 @@ class ManageOdds extends React.Component{
     );
   }
 }
-
-ManageOdds.propTypes = {};
-
-ManageOdds.defaultProps = {};
-
-export default ManageOdds;

@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Sim.less';
-import footballImg from '../../assets/images/Football_blurred.jpg';
 import nflIcon from '../../assets/images/nfl_logo.png';
 import styled from 'styled-components';
 import SimAllEvents from '../SimAllEvents/SimAllEvents';
+
+
+type Props = {
+  
+};
+
+type State = {
+  selectedMenu: string;
+};
 
 const ComponentWithPseudoClass = styled.div`
   display: flex;
@@ -52,15 +60,19 @@ const ComponentWithPseudoClass = styled.div`
     }
   }`;
 
-class Sim extends React.Component{
-  constructor(props){
+export default class Sim extends React.Component{
+  props: Props;
+  state: State;
+
+  constructor(props : Props){
     super(props);
     this.state = {
       selectedMenu: 'all'
     };
+    this.props = props;
   }
 
-  clickedTab(selectedTabStr, event){
+  clickedTab(selectedTabStr: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>){
     if (event){
       event.preventDefault();
       event.stopPropagation();
@@ -113,9 +125,3 @@ class Sim extends React.Component{
     );
   }
 }
-
-Sim.propTypes = {};
-
-Sim.defaultProps = {};
-
-export default Sim;

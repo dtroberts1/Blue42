@@ -7,50 +7,76 @@ import styled from 'styled-components';
 import tbIcon from '../../assets/team-icons/TBB.png';
 import ssIcon from '../../assets/team-icons/SS.png';
 import GenericModal from '../GenericModal/GenericModal';
+import Blue42Btn from '../Blue42Btn/Blue42Btn';
+import GamesService from '../../services/games.service';
+import { type } from 'os';
+import {TestOdd} from '../../interfaces/interface';
 
-const AllEventsOverviewOddsCard = styled.div`
-padding: .6em 1.4em;
-font-size: .9rem;
-border-radius: 8px;
-position: relative;
-width: 2.6em;
-height: 2.5em;
-filter: brightness(${(props) => (props.odds.isActive ? 1.8 : 1)});
-background: ${(props) => (props.odds.isActive ? 'linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important' : '#271b2f')};
-
-&:hover{
-    filter: brightness(1.8);
-    cursor: pointer;
-    background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important
+type Props = {
 }
 
-&::before{
-    content: "${props => props.odds.header}";
+type State = {
+  testData: {
+    odds: TestOdd[],
+    category1Header: string,
+    category2Header: string,
+    category3Header: string,
+    eventDateStr: string,
+    eventTimeStr: string,
+  }
+  selectedOdd: TestOdd | null,
+  createEventModalIsVisible: boolean,
+}
+
+type AllEventsOverviewOddsCardProp = {
+  odd: TestOdd,
+}
+
+const AllEventsOverviewOddsCard = styled.div`
+  padding: .6em 1.4em;
+  font-size: .9rem;
+  border-radius: 8px;
+  position: relative;
+  width: 2.6em;
+  height: 2.5em;
+  filter: brightness(${(props: AllEventsOverviewOddsCardProp) => (props.odd.isActive ? 1.8 : 1)});
+  background: ${(props) => (props.odd.isActive ? 'linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important' : '#271b2f')};
+
+  &:hover{
+      filter: brightness(1.8);
+      cursor: pointer;
+      background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important
+  }
+
+  &::before{
+      content: "${props => props.odd.header}";
+      position: absolute;
+      top: .23em;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-weight: 500;
+
+  }
+
+  &::after{
+    content: "${props => props.odd.value}";
     position: absolute;
-    top: .23em;
     left: 0;
+    bottom: .38em;
     width: 100%;
     text-align: center;
     font-weight: 500;
 
-}
-
-&::after{
-  content: "${props => props.odds.value}";
-  position: absolute;
-  left: 0;
-  bottom: .38em;
-  width: 100%;
-  text-align: center;
-  font-weight: 500;
-
-}
+  }
 
 }`;
 
-class SimAllEvents extends React.Component{
+export default class SimAllEvents extends React.Component{
+  props: Props;
+  state: State;
 
-  constructor(props){
+  constructor(props : Props){
     super(props);
     this.state = {
       selectedOdd: null,
@@ -69,12 +95,12 @@ class SimAllEvents extends React.Component{
           },
           {
             header: 'X',
-            value: 830,
+            value: '830',
             isActive: false
           },
           {
             header: '2',
-            value: 123,
+            value: '123',
             isActive: false
           },
           {
@@ -83,7 +109,7 @@ class SimAllEvents extends React.Component{
             isActive: false
           },
           {
-            header: 'U 21.5',
+            header: 'U 12.5',
             value: '-118',
             isActive: false
           },
@@ -100,6 +126,11 @@ class SimAllEvents extends React.Component{
         ]
       }
     }
+    this.props = props;
+  }
+
+  componentDidMount(){
+
   }
 
   openCreateGameModal(){
@@ -109,13 +140,23 @@ class SimAllEvents extends React.Component{
   }
 
   
-  closeCreateModal(){
+  closeCreateModal(promise: () => Promise<any>){
+
     this.setState((state, props) => ({
       createEventModalIsVisible: false
     }));
+
+    if (promise){
+      console.log("invoking promise in simallevents")
+      promise()
+        .then(() => {
+          console.log("finished promise call in simallevents");
+          
+        });
+    }
   }
 
-  clickedOddsCard(index, event){
+  clickedOddsCard(index : number, event: React.MouseEvent<HTMLDivElement, MouseEvent>){
     //this.setState({testData.odds[index].isActive : true})
 
     let arr = this.state.testData.odds;
@@ -170,54 +211,53 @@ class SimAllEvents extends React.Component{
               <div className={styles.AllEventsOverviewOddsCell} style={{flex: 3}}>
                 <div>
                   <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(0, e)} odds={this.state.testData.odds[0]}/>
+                    <AllEventsOverviewOddsCard onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => this.clickedOddsCard(0, e)} odd={this.state.testData.odds[0]}/>
                   </div>
                 </div>
                 <div>
                   <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(1, e)} odds={this.state.testData.odds[1]}/>
+                    <AllEventsOverviewOddsCard onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => this.clickedOddsCard(1, e)} odd={this.state.testData.odds[1]}/>
                   </div>
                 </div>
                 <div>
                   <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(2, e)} odds={this.state.testData.odds[2]}/>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.AllEventsOverviewOddsCell} style={{flex: 2}}>
-                <div>
-                  <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(3, e)} odds={this.state.testData.odds[3]}/>
-                  </div>
-                </div>
-                <div>
-                  <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(4, e)} odds={this.state.testData.odds[4]}/>
+                    <AllEventsOverviewOddsCard onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => this.clickedOddsCard(2, e)} odd={this.state.testData.odds[2]}/>
                   </div>
                 </div>
               </div>
               <div className={styles.AllEventsOverviewOddsCell} style={{flex: 2}}>
                 <div>
                   <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(5, e)} odds={this.state.testData.odds[5]}/>
+                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(3, e)} odd={this.state.testData.odds[3]}/>
                   </div>
                 </div>
                 <div>
                   <div style={{position: 'relative'}}>
-                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(6, e)} odds={this.state.testData.odds[6]}/>
+                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(4, e)} odd={this.state.testData.odds[4]}/>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.AllEventsOverviewOddsCell} style={{flex: 2}}>
+                <div>
+                  <div style={{position: 'relative'}}>
+                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(5, e)} odd={this.state.testData.odds[5]}/>
+                  </div>
+                </div>
+                <div>
+                  <div style={{position: 'relative'}}>
+                    <AllEventsOverviewOddsCard onClick={(e) => this.clickedOddsCard(6, e)} odd={this.state.testData.odds[6]}/>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div tabIndex="1" onClick={(event) => {this.openCreateGameModal()}} className={styles.CreateGameModalBtn}>
-          Create Event
-        </div>
+        <Blue42Btn onClick={(event) => {this.openCreateGameModal()}} btnText={'Create Event'} className={styles.Blue42BtnClass} />
+
         {
           this.state.createEventModalIsVisible &&
             <GenericModal
-            onCloseModal={(evt) => {this.closeCreateModal()}}
+            onCloseModal={(promise: () => Promise<any>) => {this.closeCreateModal(promise)}}
             title="Create Game"
             />
         }
@@ -225,9 +265,3 @@ class SimAllEvents extends React.Component{
     ); 
   }
 }
-
-SimAllEvents.propTypes = {};
-
-SimAllEvents.defaultProps = {};
-
-export default SimAllEvents;

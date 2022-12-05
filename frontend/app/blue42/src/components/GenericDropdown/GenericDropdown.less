@@ -4,7 +4,7 @@
 
 .ImgSelectorContainer{
 
-    width: 20em;
+    /*width: 20em;*/
     position: relative;
 
     .DropdownLabel{
@@ -66,8 +66,11 @@
     height: 2.7em !important;
     color: black;
     display: flex;
-    min-height: 4em !important;
-    padding-top: 1em !important;
+
+    &.HasLabel{
+        min-height: 4em !important; /* If Title should be displayed */
+        padding-top: 1em !important; /* If Title should be displayed */
+    }
 
     .DropdownArrow{
         width:2em;
@@ -100,7 +103,7 @@
 .ImgSelectorItemContainer{
     height: 100%;
     width: 100%;
-    padding: 0 0.4em 0 3ch;
+    padding: 0 0.4em 0 1ch;
     box-sizing: border-box;
     border-bottom: inset 2px;
     background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important;
@@ -117,11 +120,15 @@
     .ImgSelectorItemValue{
         display: flex;
         align-items: center;
-        width: calc(100% - 2em);
         height: 100%;
-        float: right;
         padding-left: .5em;
         box-sizing: border-box;
+
+        &.HasImages{
+            width: calc(100% - 2em);
+            float: right;
+        }
+
         div{
             max-width: 100%;
             overflow: hidden;
