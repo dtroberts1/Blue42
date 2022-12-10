@@ -127,17 +127,13 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
   const [createEventModalIsVisible, setCreateEventModalIsVisible] = useState(false);
 
   useEffect(() => {
-    console.log("retrieving games.")
     const subscription = GamesService.getGames()
 
       .subscribe((promise: Promise<Game[]>) =>{
         promise.then((retrievedGames: Game[]) => {
-          console.log({"retrievedGames":retrievedGames})
 
           setGames(retrievedGames);
-          console.log({"updatedGams": games});
 
-          console.log(games.map(g => g.allGameOdds.length));
         });
       });
 
@@ -154,10 +150,8 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
     setCreateEventModalIsVisible(false);
 
     if (promise){
-      console.log("invoking promise in simallevents")
       promise()
         .then(() => {
-          console.log("finished promise call in simallevents");
           
         });
     }
@@ -165,10 +159,6 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
 
   const clickedOddsCard = (game: Game, index : number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
-    console.log({"game.oddCardMap.values.length":game.oddCardMap.size});
-    console.log("index is " + index)
-    console.log("size is " + game.oddCardMap.size)
-    console.log({"game.oddCardMap.get(1)_initial":JSON.parse(JSON.stringify(game.oddCardMap.get(1)))})
     for(let i = 0; i < game.oddCardMap.size; i++){
       let oddCard: OddCard = game.oddCardMap.get(i) as OddCard;
       if (i === index){
@@ -179,11 +169,9 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
       }
 
       game.oddCardMap.set(i, oddCard);
-      console.log({"oddCard":oddCard})
     }
     
     setGames([...games]);
-    console.log({"games":games})
     /*
     let arr = testData.odds;
     arr.filter((itm, itmIndex) => itmIndex !== index).forEach((odd) => {odd.isActive = false});

@@ -5,6 +5,12 @@ import ReactModal from 'react-modal';
 import GenericModal from '../GenericModal/GenericModal';
 import Blue42Btn from '../Blue42Btn/Blue42Btn'
 import { type } from '@testing-library/user-event/dist/type';
+import {RiEditLine} from 'react-icons/ri';
+import {FcCancel} from 'react-icons/fc';
+import {GiAmericanFootballBall} from 'react-icons/gi';
+import {FiSave} from 'react-icons/fi';
+import {AiOutlineCloseCircle} from 'react-icons/ai'
+import {IoMdPulse} from 'react-icons/io';
 
 type Props = {
   
@@ -59,15 +65,56 @@ export default class ManageOdds extends React.Component{
             My Odds
           </div>
           <div className={styles.ManageOddsBody}>
-            Body
+            <div tabIndex={1} className={styles.UpperCloseBtn}>
+              <AiOutlineCloseCircle />
+            </div>
+            <div style={{position:'relative'}}>
+              <div className={styles.ManageOddsBodyGameLabel}>Tennessee Titans vs Jacksonville Jaguars</div>
+              <div style={{position: 'relative', paddingTop: '0.3em', paddingLeft: '2.3em'}}>
+                <div className={styles.CardOddHeader}>
+                  <div>
+                    Over 20.5
+                  </div>
+                  <div tabIndex={1} style={{marginLeft: '0.85em'}}  className={styles.CardOddHeaderBtn}>
+                    <RiEditLine />
+                  </div>
+                  <div style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                    <FiSave />
+                  </div>
+                  <div style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                    <FcCancel />
+                  </div>
+                </div>
+                <div style={{color: '#9c9c9c', fontWeight: '640', filter: 'brightness(1.2)'}}>
+                  Total. Half 1
+                </div>
+                <div style={{position: 'absolute', left: '0', top: '0', fontSize: '1.3rem', height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '0.2em'}}>
+                  <GiAmericanFootballBall />
+                </div>
+              </div>
+              <div className={styles.CardOddValue}>
+                <div className={styles.CardOddData}>
+                  <div>
+                    <IoMdPulse />
+                  </div>
+                  <div className={styles.CardOddDataValue}>
+                    -115
+                  </div>
+                  <div style={{marginLeft: '0.85em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                    <RiEditLine />
+                  </div>
+                  <div style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                    <FiSave />
+                  </div>
+                  <div style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                    <FcCancel />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className={styles.ManageOddsContainer} style={{height: 'initial'}}>
-        {/*
-          <div className={styles.CreateBtn} tabIndex="1" onClick={(event) => {this.openCreateModal()}}> 
-            Create Odds
-          </div>        
-         */}
          <div >
           <Blue42Btn onClick={(event) => {this.openCreateModal()}} btnText={'Create Odds'} />
          </div>

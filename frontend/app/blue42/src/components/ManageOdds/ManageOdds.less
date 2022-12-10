@@ -54,6 +54,76 @@
             border-radius: 10px;
             padding: .6em;
             background: #3A2334;
+
+            .UpperCloseBtn{
+                font-size: 1.5rem;
+                position: absolute;
+                top: 0.2em;
+                right: 0.4em;
+                z-index: 1;
+                color: #9c9c9c; 
+                font-weight: 640;
+                filter: brightness(1.2);
+
+                &:hover{
+                    svg{
+                        cursor: pointer;
+                        filter: brightness(3);
+                    }
+                }
+            }
+
+            .ManageOddsBodyGameLabel{
+                white-space: nowrap;
+                max-width: 88%;
+                overflow-x: hidden;
+                filter: brightness(.5);
+                text-overflow: ellipsis;
+                margin-top: -.3em;
+            }
+
+            .CardOddHeader{
+                display: flex;
+                align-items: center;
+            }
+
+            .CardOddValue{
+                .CardOddData{
+                    display: flex;
+                    padding-top: 1em;
+                    padding-left: 0.3em;
+
+                    .CardOddDataValue{
+                        padding-left: 1.2em;
+                        position: relative;
+
+                        &::after{
+                            content: '';
+                            position: absolute;
+                            height: 1.55em;
+                            width: 3.38em;
+                            background-color: white;
+                            opacity: .2;
+                            border-radius: 8px;
+                            left: 0;
+                            margin-left: 0.5em;
+                            top: 0;
+                        }
+                    }
+                }
+            }
+
+            .CardOddHeaderBtn{
+                font-size: 1.2rem;
+
+                &:hover{
+                    svg{
+                        color: #7747e5;
+                        filter: brightness(1.5);
+                        cursor: pointer;
+                    }
+                }
+            }
         }
     }
 }
