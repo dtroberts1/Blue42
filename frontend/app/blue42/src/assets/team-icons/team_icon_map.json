@@ -1,0 +1,130 @@
+[
+    {
+        "abbrev": "ARI",
+        "path": "AC.png"
+    },
+    {
+        "abbrev": "ATL",
+        "path": "AF.png"
+    },
+    {
+        "abbrev": "Buf",
+        "path": "BB.png"
+    },
+    {
+        "abbrev": "Bal",
+        "path": "BR.png"
+    },
+    {
+        "abbrev": "Cin",
+        "path": "CB.png"
+    },
+    {
+        "abbrev": "Chi",
+        "path": "CBears.png"
+    },
+    {
+        "abbrev": "Cle",
+        "path": "CBrowns.png"
+    },
+    {
+        "abbrev": "Car",
+        "path": "CP.png"
+    },
+    {
+        "abbrev": "Den",
+        "path": "DB.png"
+    },
+    {
+        "abbrev": "Dal",
+        "path": "DC.png"
+    },
+    {
+        "abbrev": "DET",
+        "path": "DL.png"
+    },
+    {
+        "abbrev": "GB",
+        "path": "GBP.png"
+    },
+    {
+        "abbrev": "Hou",
+        "path": "HT.png"
+    },
+    {
+        "abbrev": "Ind",
+        "path": "IC.png"
+    },
+    {
+        "abbrev": "JAX",
+        "path": "JJ.png"
+    },
+    {
+        "abbrev": "KC",
+        "path": "KCC.png"
+    },
+    {
+        "abbrev": "LAC",
+        "path": "LAC.png"
+    },
+    {
+        "abbrev": "LA",
+        "path": "LAR.png"
+    },
+    {
+        "abbrev": "Oak",
+        "path": "LVR.png"
+    },
+    {
+        "abbrev": "Mia",
+        "path": "MD.png"
+    },
+    {
+        "abbrev": "Min",
+        "path": "MV.png"
+    },
+    {
+        "abbrev": "NE",
+        "path": "NEP.png"
+    },
+    {
+        "abbrev": "NO",
+        "path": "NOS.png"
+    },
+    {
+        "abbrev": "NYG",
+        "path": "NYG.png"
+    },
+    {
+        "abbrev": "NYJ",
+        "path": "NYJ.png"
+    },
+    {
+        "abbrev": "PHI",
+        "path": "PE.png"
+    },
+    {
+        "abbrev": "Pit",
+        "path": "PS.png"
+    },
+    {
+        "abbrev": "SF",
+        "path": "SF4.png"
+    },
+    {
+        "abbrev": "SEA",
+        "path": "SS.png"
+    },
+    {
+        "abbrev": "TB",
+        "path": "TBB.png"
+    },
+    {
+        "abbrev": "Ten",
+        "path": "TT.png"
+    },
+    {
+        "abbrev": "Was",
+        "path": "WR.png"
+    }
+]

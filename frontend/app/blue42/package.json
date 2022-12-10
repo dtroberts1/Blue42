@@ -53,6 +53,7 @@
   "devDependencies": {
     "@types/react-modal": "^3.13.1",
     "@types/uuid": "^9.0.0",
+    "@types/webpack-env": "^1.18.0",
     "file-loader": "^6.2.0",
     "flow-bin": "^0.188.2",
     "webpack": "^5.75.0",

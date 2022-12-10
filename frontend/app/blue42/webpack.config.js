@@ -1,4 +1,4 @@
-// Webpack uses this to work with directories
+/*// Webpack uses this to work with directories
 const path = require('path');
 
 // This is the main configuration object.
@@ -31,3 +31,4 @@ module.exports = {
     },
   ],
 };
+*/
