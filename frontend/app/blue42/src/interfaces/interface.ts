@@ -42,9 +42,11 @@ export interface Status{
 }
 
 export interface OddCard{
+    id ?: string,
     header: string;
     value: string;
     isActive: boolean;
+    cardMode ?: "add" | "update";
 }
   
   export interface Game{

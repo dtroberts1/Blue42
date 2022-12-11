@@ -11,6 +11,7 @@ import Blue42Btn from '../Blue42Btn/Blue42Btn';
 import {Game, OddCard, TestOdd} from '../../interfaces/interface';
 import {GamesService} from '../../services/game.service';
 import {Observable, Subject} from 'rxjs';
+import GameOddService from '../../services/gameOdd.service';
 
 type Props = {
 }
@@ -135,11 +136,24 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
           setGames(retrievedGames);
 
         });
+
+        const gameOddSubscription = GameOddService.subscribe(handleOddCardChange);
+        //GameOddService.init();
+    
+        return () => {
+          gameOddSubscription.unsubscribe();
+          subscription.unsubscribe();
+        };
+
       });
 
     return () => subscription.unsubscribe();
   }, []);
   
+  const handleOddCardChange = (cards: OddCard[]) => {
+    //setOddCards(cards);
+  };
+
 
   const openCreateGameModal = () => {
     setCreateEventModalIsVisible(true);
@@ -163,9 +177,15 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
       let oddCard: OddCard = game.oddCardMap.get(i) as OddCard;
       if (i === index){
         oddCard.isActive = !oddCard.isActive;
+        if (oddCard.isActive){
+          GameOddService.addManagementCard(oddCard);
+        }
+        else{
+          GameOddService.removeManagementCard(oddCard);
+        }
       }
       else{
-        oddCard.isActive = false;
+        //oddCard.isActive = false;
       }
 
       game.oddCardMap.set(i, oddCard);

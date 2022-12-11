@@ -201,7 +201,6 @@ export default class CreateGameModalContent extends React.Component{
     this.setState((state, props) => ({
       seedOdds: evt && evt.target && (evt.target as any).checked
     }));
-    console.log({"state.seedOdds": this.state.seedOdds})
   }
 
   async closeModal(withData: boolean){
@@ -209,7 +208,6 @@ export default class CreateGameModalContent extends React.Component{
       // Send callback, which will be invoked by parent component
       let promise = () => {
         return new Promise((resolve, reject) => {
-          console.log("in call back.");
           // Write Backend calls here (TODO)
           //
           //
@@ -217,7 +215,6 @@ export default class CreateGameModalContent extends React.Component{
           resolve(true);
         })
       };
-      console.log("sending props to parent")
       this.props.callBack(promise);
     }
     else{

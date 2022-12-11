@@ -1,9 +1,8 @@
-import { Subject } from 'rxjs';
 import {fromFetch} from 'rxjs/fetch';
-import {switchMap, of, catchError, Observable, BehaviorSubject, tap, map} from 'rxjs';
-import { useState } from 'react';
+import {Observable, BehaviorSubject, map} from 'rxjs';
 import { Game, OddCard, TeamIcon } from '../interfaces/interface';
 import teamIconMapJson from '../assets/team-icons/team_icon_map.json';
+import { v4 } from 'uuid';
 
 const images = require.context('../../src/assets/team-icons', true);
 
@@ -29,7 +28,6 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
     if (data){
         reqInit.body = JSON.stringify({...data});
     }
-    console.log("in request");
     let req = new Request(url, reqInit);
     return fromFetch(req)
         .pipe(
@@ -45,18 +43,21 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 header: '1',
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].awayMoneyLine?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             })
                         .set(
                             1, {
                                 header: 'X',
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].drawMoneyLine?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             })
                         .set(
                             2, {
                                 header: '2',
                                 value: game.allGameOdds[0] ? game.allGameOdds[0]?.homeMoneyLine?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             }
                         )
                         .set(
@@ -64,6 +65,7 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 header: 'O ' + (game.allGameOdds[0] ? game.allGameOdds[0].overUnder?.toString() : "") ,
                                 value: game.allGameOdds[0]? game.allGameOdds[0].overPayout?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             }
                         )
                         .set(
@@ -71,6 +73,7 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 header: 'U' + (game.allGameOdds[0] ? game.allGameOdds[0].overUnder?.toString() : "") ,
                                 value: game.allGameOdds[0]? game.allGameOdds[0].underPayout?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             }
                         )
                         .set(
@@ -78,6 +81,7 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 header: '1 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].awayPointSpread > 0 ? '  +' : '  ') + game.allGameOdds[0].awayPointSpread.toString() : ""),
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].awayPointSpreadPayout?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             }
                         )
                         .set(
@@ -85,6 +89,7 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 header: '2 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].homePointSpread > 0 ? '  +' : '  ') + game.allGameOdds[0].homePointSpread.toString() : ""),
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].homePointSpreadPayout?.toString() : "",
                                 isActive: false,
+                                id: v4(),
                             }
                         ),
                     
@@ -115,7 +120,6 @@ export const GamesService = {
     },
 
     getGames : () => {
-        console.log("in getGames!");
         const method = 'GET';
         let url = 'games/allGames'
         return request(url, method);
