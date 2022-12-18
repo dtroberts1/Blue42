@@ -24,6 +24,9 @@ export interface GameOdd{
     underPayout: number;
     created: Date;
     updated: Date;
+    gameId: number;
+    game ?: Game;
+    book ?: Book;
 }
 
 export interface TeamIcon{
@@ -41,10 +44,26 @@ export interface Status{
     statusText: string;
 }
 
+export interface CardType{
+    name: "awayMoneyLine" | "drawMoneyLine" | "homeMoneyLine" | "overPayout" | "underPayout" | "awayPointSpreadPayout" | "homePointSpreadPayout";
+}
+
 export interface OddCard{
+    cardClosed ?: () => void;
+    cardUpdated ?: () => void;
+    cardType: CardType;
+    id ?: number,
     header: string;
+    parsedHeader: number;
     value: string;
+    displayedValue: string;
     isActive: boolean;
+    cardMode ?: "add" | "update";
+    gameId : number;
+    gameTitle : string;
+    headerLabel: string;
+    subHeaderLabel: string;
+    valueLabel: string;
 }
   
   export interface Game{
@@ -58,4 +77,8 @@ export interface OddCard{
     awayTeam: Team;
     allGameOdds: GameOdd[];
     oddCardMap : Map<number, OddCard>;
+  }
+
+  export interface Book{
+    id: number;
   }

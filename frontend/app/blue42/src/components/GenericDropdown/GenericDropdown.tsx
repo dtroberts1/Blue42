@@ -9,7 +9,10 @@ import { v4 } from 'uuid'
 
 type Props ={
   customClass ?: string;
-  data: any[],
+  data: {
+    imagePath?: string,
+    name: string,
+  }[],
   hasTooltips: boolean,
   hasLabel: boolean,
   handleSelectedEntity: (itm: any) => void,
@@ -20,7 +23,11 @@ type Props ={
 type State = {
   dataList: any[];
   dataDropdownExpanded: boolean;
-  selectedEntity: any,
+  selectedEntity: {imagePath ?: string, name: string},
+  data: {
+    imagePath?: string,
+    name: string,
+  }[],
 }
 
 export class GenericDropdown extends React.Component{
@@ -33,20 +40,20 @@ export class GenericDropdown extends React.Component{
     this.state = {
       selectedEntity: props.data[0],
       dataDropdownExpanded: false,
-      dataList: []
+      dataList: [],
+      data: props.data
     }
     this.props = props;
   }
   componentDidMount(){
-    this.loaded = true;
-  }
-  
-  componentWillMount(){
-    let dataListItems = this.dataListItems();
 
-    this.setState((state, props) => ({
-      dataList: dataListItems
-    }));
+
+    this.loaded = true;
+
+  }
+
+  static getDerivedStateFromProps(nextProps : Props, prevState: State) {
+    return ({data: nextProps.data, selectedEntity: prevState.selectedEntity == null ? nextProps.data[0] : prevState.selectedEntity})
   }
 
   toggleDataDropdown(){
@@ -58,7 +65,8 @@ export class GenericDropdown extends React.Component{
   selectedEntity(itm : any){
     this.setState((state : State, props : Props) => ({
       dataDropdownExpanded: false,
-      selectedEntity: props.data.find((currItm) =>  currItm.name === itm.name)
+      //data: state.data.filter(currItm => currItm.name !== itm.name),
+      selectedEntity: props.data.find((currItm) =>  currItm?.name === itm?.name)
     }));
 
     // Emit event for parent
@@ -67,17 +75,17 @@ export class GenericDropdown extends React.Component{
     }
   }
 
-  dataListItems() {
-    return this.props.data.sort().map((itm) => 
+  dataListItems = () => {
+    return this.state.data.filter(dataItm => dataItm.name !== this.state.selectedEntity.name).sort().map((itm) => 
     <React.Fragment key={v4()}>
-      <li className={styles.ImgSelectorItem} key={itm.name}>
+      <li className={styles.ImgSelectorItem} key={itm?.name}>
         <div onClick={(evt) => {this.selectedEntity(itm)}} className={styles.ImgSelectorItemContainer}>
           {
             /* If Dropdown Image should be displayed */
-            this.props.hasImages && <div className={styles.ImgSelectorItemImg}><img src={acImage}/></div>
+            this.props.hasImages && <div className={styles.ImgSelectorItemImg}><img src={itm.imagePath}/></div>
           }
           <div className={styles.ImgSelectorItemValue}>
-            <div data-tip={itm.name} data-class={styles.ToolTipClass}>{itm.name} {this.props.hasTooltips && <ReactTooltip />}
+            <div data-tip={itm?.name} data-class={styles.ToolTipClass}>{itm?.name} {this.props.hasTooltips && <ReactTooltip />}
             </div>
           </div> 
         </div>
@@ -109,10 +117,10 @@ export class GenericDropdown extends React.Component{
           {
             /* If Dropdown Image should be displayed */
             this.props.hasImages &&
-            <div className={styles.ImgSelectorItemImg}><img src={acImage}/></div>
+            <div className={styles.ImgSelectorItemImg}><img src={this.state.selectedEntity.imagePath}/></div>
           }
-          <div className={styles.ImgSelectorItemValue + ' ' + (this.props.hasImages ? styles.hasImages : '')}><div data-tip={this.state.selectedEntity.name} data-class={styles.ToolTipClass}>
-          {this.state.selectedEntity.name} 
+          <div className={styles.ImgSelectorItemValue + ' ' + (this.props.hasImages ? styles.hasImages : '')}><div data-tip={this.state.selectedEntity?.name} data-class={styles.ToolTipClass}>
+          {this.state.selectedEntity?.name} 
             {this.props.hasTooltips && <ReactTooltip />}
           </div>
           <div style={{height: '100%'}}>
@@ -123,7 +131,7 @@ export class GenericDropdown extends React.Component{
         {
           this.loaded &&           
           <ul style={{'display': this.state.dataDropdownExpanded ? 'block': 'none'}} className={styles.ImgSelectorList + ' ' + (this.state.dataDropdownExpanded ? styles.ImgSelectorListExpanded : this.loaded ? styles.ImgSelectorListCollapsed : '')}>
-            {this.state.dataList}
+            {this.dataListItems()}
           </ul>
         }
       </div>

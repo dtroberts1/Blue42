@@ -12,6 +12,7 @@ import "react-toggle/style.css" // for ES6 modules
 import Toggle from 'react-toggle'
 import Blue42Btn from '../Blue42Btn/Blue42Btn';
 import {Team, Venue} from '../../interfaces/interface';
+import TeamsService from '../../services/team.service';
 
 type Props = {
   callBack(promise: (() => Promise<unknown>) | null): unknown;
@@ -22,23 +23,11 @@ type State = {
   calendarOpened: boolean,
   editTimeMode: boolean,
   date: Date,
-  seedOdds: boolean
+  seedOdds: boolean,
+  teams: Team[],
+  venues: {name: string}[]
 }
 
-const teams = [
-  {name: 'New York Patriots'},
-  {name: 'New York Jets'},
-  {name: 'Tampa Bay Bucs'},
-  {name: 'New York Giants'},
-  {name: 'Washington Redskins'},
-  {name: 'Miami Dolphins'},
-  {name: 'San Francisco 49ers'}
-]
-
-const venues = [
-  {name: 'Gillete Stadium'},
-  {name: 'FedEx Field'}
-]
 
 const locale = 'en'; // or whatever you want...
 const hours : {name: string} [] = [];
@@ -116,18 +105,38 @@ export default class CreateGameModalContent extends React.Component{
     this.props = props;
     let today = new Date();
     today.setSeconds(0);
+
     this.state = {
       calendarOpened: false,
       editTimeMode: false,
       date: today,
-      seedOdds: true
-    }
+      seedOdds: true,
+      teams: TeamsService.getTeams(),
+      venues: [],
+    };
   }
+
   componentDidMount(){
+    
   }
 
   teamSelected(competitorNbr : number, team: Team){
 
+    let tmpVenues : {name: string}[] = this.state.venues;
+    if (tmpVenues.length === 2){
+      tmpVenues.pop();
+    }
+
+    if (!tmpVenues.some(v => v.name === team.venue.name)){
+      tmpVenues.push({
+        name: team.venue.name
+      });
+    }
+    
+
+    this.setState((state : State, props: Props) => ({
+      venues : [...tmpVenues]
+    }))
   }
 
   timeSelected(time : {name: string}){
@@ -161,7 +170,7 @@ export default class CreateGameModalContent extends React.Component{
   }
 
   venueSelected(venue : Venue){
-
+    
   }
 
   dateChanged(date : Date, evt: Event){
@@ -201,7 +210,6 @@ export default class CreateGameModalContent extends React.Component{
     this.setState((state, props) => ({
       seedOdds: evt && evt.target && (evt.target as any).checked
     }));
-    console.log({"state.seedOdds": this.state.seedOdds})
   }
 
   async closeModal(withData: boolean){
@@ -209,7 +217,6 @@ export default class CreateGameModalContent extends React.Component{
       // Send callback, which will be invoked by parent component
       let promise = () => {
         return new Promise((resolve, reject) => {
-          console.log("in call back.");
           // Write Backend calls here (TODO)
           //
           //
@@ -217,7 +224,6 @@ export default class CreateGameModalContent extends React.Component{
           resolve(true);
         })
       };
-      console.log("sending props to parent")
       this.props.callBack(promise);
     }
     else{
@@ -237,7 +243,7 @@ export default class CreateGameModalContent extends React.Component{
               className={styles.CompetitorDropdown}>
               <GenericDropdown 
                 hasTooltips={false}
-                data={teams} 
+                data={this.state.teams} 
                 hasLabel={true}     
                 hasImages={true}        
                 handleSelectedEntity={(team: Team) => {this.teamSelected(0, team)}}
@@ -248,7 +254,7 @@ export default class CreateGameModalContent extends React.Component{
             <div  
               className={styles.CompetitorDropdown}>
               <GenericDropdown 
-              data={teams}
+              data={this.state.teams}
               hasTooltips={false}
               hasLabel={true}  
               hasImages={true}           
@@ -301,7 +307,7 @@ export default class CreateGameModalContent extends React.Component{
             <div  
                 style={{position: 'absolute', top: '.38em', left: '0', zIndex: '1', marginLeft: '0'}}
                 className={styles.VenueDropdown}>
-                <GenericDropdown data={venues}
+                <GenericDropdown data={this.state.venues}
                 hasTooltips={false}
                 hasLabel={false}             
                 hasImages={false}
