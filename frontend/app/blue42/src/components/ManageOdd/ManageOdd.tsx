@@ -93,13 +93,11 @@ class ManageOdd extends React.Component{
 
   saveEditHeader(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
     // TODO
-
-
-      GameOddService.saveManagementCard(this.props.id, this.state.headerNbr.toString(), null);
-      //this.closeCard(null as any);
-      this.setState((state, props) => ({
-        updatingHeader: false
-      }));
+    GameOddService.saveManagementCard(this.props.id, this.state.headerNbr.toString(), null);
+    //this.closeCard(null as any);
+    this.setState((state, props) => ({
+      updatingHeader: false
+    }));
   }
 
   saveEditValue(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
@@ -108,6 +106,17 @@ class ManageOdd extends React.Component{
     this.setState((state, props) => ({
       updatingValue: false
     }));
+  }
+
+  createNewOddCard(){
+    //GameOddService.createNewOddCard(this.props.id, this.state.headerNbr.toString(), this.state.valueNbr.toString())
+    GameOddService.saveManagementCard(this.props.id, this.state.headerNbr.toString(), this.state.valueNbr.toString());
+
+    this.setState((state, props) => ({
+      updatingValue: false
+    }));
+    GameOddService.removeManagementCard(this.props.id)
+
   }
 
   headerNbrChanged(e: React.ChangeEvent<HTMLInputElement>){
@@ -233,7 +242,7 @@ class ManageOdd extends React.Component{
             this.props.cardMode === 'add' && 
             <div style={{display: 'flex', justifyContent:'center', transform: 'scale(.8)'}}>
               <div style={{marginTop: '1em'}}>
-                <Blue42Btn onClick={(event) => {}} btnText={'Create'} />
+                <Blue42Btn onClick={(event) => {this.createNewOddCard()}} btnText={'Create'} />
               </div>
             </div>
           }

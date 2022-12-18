@@ -115,13 +115,14 @@ const GameOddService = {
         };
         subject.next({...state})
     },
+    createNewOddCard(oddCardId: number, header: string | null, value: string | null){
+    },
     saveManagementCard: (oddCardId: number, header: string | null, value: string | null) => {
 
         // Find the GameOdd for the provided OddCard (id) and update its specific properties.
         let oddCard = state.managementCards.find(card => card.id === oddCardId);
 
         if (oddCard){
-
             // Required parameters
             // Game, Card Type. It should accept all values (up to 2) from the frontend for the specific card type
             let myGames = GamesService.getGames();
@@ -201,10 +202,7 @@ const GameOddService = {
                         }
                     );
             }
-            
         }
-
-
     },
     initialState
 }
