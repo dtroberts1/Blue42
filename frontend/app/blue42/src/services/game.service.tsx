@@ -51,6 +51,12 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
         reqInit.body = JSON.stringify({...data});
     }
 
+    /**
+     * TODO: Currently this handles Full Game stats. This will need to be extended to handle "Alternate Market" Game Odds
+     * 
+     * 
+     */
+
     let req = new Request(url, reqInit);
     return fromFetch(req)
         .pipe(
@@ -76,7 +82,10 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'awayMoneyLine'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'awayMoneyLine'}
+                                cardType: {name: 'awayMoneyLine'},
+                                headerLabel: game.awayTeam.name,
+                                subHeaderLabel: `MoneyLine. Full Game`,
+                                valueLabel: 'V1',
                             })
                         .set(
                             1, {
@@ -88,7 +97,10 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'drawMoneyLine'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'drawMoneyLine'}
+                                cardType: {name: 'drawMoneyLine'},
+                                headerLabel: 'Draw',
+                                subHeaderLabel: `MoneyLine. Full Game`,
+                                valueLabel: 'V1',
                             })
                         .set(
                             2, {
@@ -100,7 +112,10 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'homeMoneyLine'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'homeMoneyLine'}
+                                cardType: {name: 'homeMoneyLine'},
+                                headerLabel: game.homeTeam.name,
+                                subHeaderLabel: 'MoneyLine. Full Game',
+                                valueLabel: 'V1',
                             }
                         )
                         .set(
@@ -113,7 +128,10 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'overPayout'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'overPayout'}
+                                cardType: {name: 'overPayout'},
+                                headerLabel: 'Over',
+                                subHeaderLabel: 'Total. Full Game',
+                                valueLabel: 'V1',
                             }
                         )
                         .set(
@@ -126,12 +144,15 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'underPayout'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'underPayout'}
+                                cardType: {name: 'underPayout'},
+                                headerLabel: 'Under',
+                                subHeaderLabel: 'Total. Full Game',
+                                valueLabel: 'V1',
                             }
                         )
                         .set(
                             5, {
-                                header: '1 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].awayPointSpread > 0 ? '  +' : '   ') + game.allGameOdds[0].awayPointSpread.toString() : ""),
+                                header: '1 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].awayPointSpread > 0 ? '  +' : '   ') + game.allGameOdds[0].awayPointSpread?.toString() : ""),
                                 parsedHeader: game.allGameOdds[0]?.awayPointSpread ?? -1,
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].awayPointSpreadPayout?.toString() : "",
                                 displayedValue: game.allGameOdds[0] ? game.allGameOdds[0].awayPointSpreadPayout?.toString() : "",
@@ -139,12 +160,15 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'awayPointSpreadPayout'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'awayPointSpreadPayout'}
+                                cardType: {name: 'awayPointSpreadPayout'},
+                                headerLabel: game.awayTeam.name,
+                                subHeaderLabel: 'Spread. Full Game',
+                                valueLabel: 'V1',
                             }
                         )
                         .set(
                             6, {
-                                header: '2 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].homePointSpread > 0 ? '  +' : '   ') + game.allGameOdds[0].homePointSpread.toString() : ""),
+                                header: '2 ' + (game.allGameOdds[0] ? (game.allGameOdds[0].homePointSpread > 0 ? '  +' : '   ') + game.allGameOdds[0].homePointSpread?.toString() : ""),
                                 parsedHeader: game.allGameOdds[0]?.homePointSpread ?? -1,
                                 value: game.allGameOdds[0] ? game.allGameOdds[0].homePointSpreadPayout?.toString() : "",
                                 displayedValue: game.allGameOdds[0] ? game.allGameOdds[0].homePointSpreadPayout?.toString() : "",
@@ -152,7 +176,10 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                                 id: cyrb53(`${game.id}_${'homePointSpreadPayout'}`),
                                 gameId: game.id,
                                 gameTitle: `${game.awayTeam.name} vs ${game.homeTeam.name}`,
-                                cardType: {name: 'homePointSpreadPayout'}
+                                cardType: {name: 'homePointSpreadPayout'},
+                                headerLabel: game.homeTeam.name,
+                                subHeaderLabel: 'Spread. Full Game',
+                                valueLabel: 'V1',
                             }
                         )),
                     

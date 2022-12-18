@@ -123,6 +123,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
           // Add handler that executes when the card gets closed in ManageOdd component 
 
           oddCard.cardMode = oddCardIsEmpty(game, index) ? "add" : "update";
+          
           GameOddService.addManagementCard(oddCard);
         }
         else{
@@ -138,8 +139,11 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
   }
 
   const oddCardIsEmpty = (game: Game, index: number) => {
+    console.log({"index":index})
+    console.log({"game.allGameOdds[0]":game.allGameOdds[0]})
     type ObjectKey = keyof typeof game.allGameOdds[0];
     const key = game.oddCardMap.get(index)?.cardType.name as ObjectKey;
+    console.log({"key":key})
     return game.allGameOdds[0] ? game.allGameOdds[0][key] ? false : true : true;
 
 
@@ -165,13 +169,13 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
             </div>
             <div className={styles.AllEventsOverviewHeadersRight}>
               <div className={styles.CategoryHeader} style={{flex: 3}}>
-                {'Winner. Half 1'}
+                {'Money Line. Full Game'}
               </div>
               <div className={styles.CategoryHeader} style={{flex: 2}}>
-                {'Total. Half 1'}
+                {'Total. Full Game'}
               </div>
               <div className={styles.CategoryHeader} style={{flex: 2}}>
-                {'Handicap. Half 1'}
+                {'Spread. Full Game'}
               </div>
             </div>
           </div>
@@ -189,6 +193,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 0, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
+                          isEmpty={oddCardIsEmpty(game, 0)}
                           odd={game.oddCardMap.get(0) as OddCard}
                         />
                   </div>
@@ -199,6 +204,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 1, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
+                          isEmpty={oddCardIsEmpty(game, 1)}
                           odd={game.oddCardMap.get(1) as OddCard}
                         />
                   </div>
@@ -209,6 +215,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 2, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
+                          isEmpty={oddCardIsEmpty(game, 2)}
                           odd={game.oddCardMap.get(2) as OddCard}
                         />
                   </div>
@@ -232,6 +239,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 4, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
+                          isEmpty={oddCardIsEmpty(game, 4)}
                           odd={game.oddCardMap.get(4) as OddCard}
                         />
                   </div>
@@ -244,6 +252,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                       key={game.id} 
                       onClick={(e) => clickedOddsCard(game, 5, e)} 
                         compVisibility={(game.allGameOdds[0] ? true : false)}
+                        isEmpty={oddCardIsEmpty(game, 5)}
                         odd={game.oddCardMap.get(5) as OddCard}
                       />
                   </div>
@@ -254,6 +263,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 6, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
+                          isEmpty={oddCardIsEmpty(game, 6)}
                           odd={game.oddCardMap.get(6) as OddCard}
                         />
                   </div>

@@ -54,10 +54,17 @@ const ManageOdds : (props: Props) => JSX.Element = (props: Props) => {
       <React.Fragment key={v4()}> 
       <ManageOdd 
         id={card.id as number}
+        gameTitle={card.gameTitle}
         gameId={card.gameId}
         cardMode={card.cardMode ?? 'add'}
         headerNbr={card.parsedHeader} 
-        valueNbr={card.displayedValue} />
+        valueNbr={card.displayedValue}
+        headerLabel={card.headerLabel}
+        subHeaderLabel={card.subHeaderLabel}
+        valueLabel={card.valueLabel}
+        hideLowerValue={(card.cardMode === 'update' && card.displayedValue === '') || (card.cardMode === 'add' && card.cardType.name.toLowerCase().includes('moneyline'))}
+
+        />
         </React.Fragment>)
       }</React.Fragment> : '';
   }

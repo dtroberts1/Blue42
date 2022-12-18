@@ -60,7 +60,10 @@ export interface OddCard{
     isActive: boolean;
     cardMode ?: "add" | "update";
     gameId : number;
-    gameTitle ?: string;
+    gameTitle : string;
+    headerLabel: string;
+    subHeaderLabel: string;
+    valueLabel: string;
 }
   
   export interface Game{

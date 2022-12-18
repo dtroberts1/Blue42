@@ -15,6 +15,11 @@ type Props = {
   valueNbr: string,
   id: number,
   gameId: number,
+  gameTitle: string;
+  headerLabel: string;
+  subHeaderLabel: string;
+  valueLabel : string | null;
+  hideLowerValue: boolean;
 }
 
 type State = {
@@ -22,7 +27,6 @@ type State = {
   updatingValue: boolean,
   headerNbr: number,
   valueNbr: number,
-  hideLowerValue: boolean;
 }
 
 class ManageOdd extends React.Component{
@@ -39,7 +43,6 @@ class ManageOdd extends React.Component{
       updatingValue: false,
       headerNbr: props.cardMode === 'update' ? props.headerNbr : 0,
       valueNbr: props.cardMode === 'update' ? Number.parseFloat(props.valueNbr) : 0,
-      hideLowerValue: props.cardMode === 'update' && props.valueNbr === ''
     }
     this.props = props;
     
@@ -125,11 +128,11 @@ class ManageOdd extends React.Component{
           <div onClick={(evt) => {this.closeCard(evt)}} tabIndex={1} className={styles.UpperCloseBtn}>
             <AiOutlineCloseCircle />
           </div>
-          <div className={styles.ManageOddsBodyGameLabel}>Tennessee Titans vs Jacksonville Jaguars</div>
+          <div className={styles.ManageOddsBodyGameLabel}>{this.props.gameTitle}</div>
           <div style={{position: 'relative', paddingTop: '0.3em', paddingLeft: '2.3em'}}>
             <div className={styles.CardOddHeader}>
               <div>
-                Over&nbsp;
+                {this.props.headerLabel}&nbsp;
                 {!this.state.updatingHeader && this.props.cardMode === 'update' && <React.Fragment><span>{this.state.headerNbr}</span></React.Fragment>} 
                 {(this.state.updatingHeader || this.props.cardMode === 'add') && <React.Fragment>
                   <span>
@@ -170,14 +173,14 @@ class ManageOdd extends React.Component{
               }
             </div>
             <div style={{color: '#9c9c9c', fontWeight: '640', filter: 'brightness(1.2)'}}>
-              Total. Half 1
+              {this.props.subHeaderLabel}
             </div>
             <div style={{position: 'absolute', left: '0', top: '0', fontSize: '1.3rem', height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '0.2em'}}>
               <GiAmericanFootballBall />
             </div>
           </div>
           {
-            !this.state.hideLowerValue &&
+            !this.props.hideLowerValue &&
             <div className={styles.CardOddValue}>
             <div className={styles.CardOddData}>
               <div>
