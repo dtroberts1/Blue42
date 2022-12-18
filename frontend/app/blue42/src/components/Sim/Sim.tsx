@@ -4,6 +4,7 @@ import styles from './Sim.less';
 import nflIcon from '../../assets/images/nfl_logo.png';
 import styled from 'styled-components';
 import SimAllEvents from '../SimAllEvents/SimAllEvents';
+import TeamsService from '../../services/team.service';
 
 
 type Props = {
@@ -69,6 +70,7 @@ export default class Sim extends React.Component{
     this.state = {
       selectedMenu: 'all'
     };
+    TeamsService.init();
     this.props = props;
   }
 

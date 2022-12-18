@@ -38,7 +38,6 @@ const ManageOdds : (props: Props) => JSX.Element = (props: Props) => {
 
   const handleOddCardChange = (data: {managementCards: OddCard[]}) => {
     setOddCards(data.managementCards);
-
   };
 
   const openCreateModal = () => {
@@ -54,9 +53,11 @@ const ManageOdds : (props: Props) => JSX.Element = (props: Props) => {
       {oddCards.map((card : OddCard) =>
       <React.Fragment key={v4()}> 
       <ManageOdd 
+        id={card.id as number}
+        gameId={card.gameId}
         cardMode={card.cardMode ?? 'add'}
-        headerNbr={Number.parseFloat(card.header)} 
-        valueNbr={Number.parseFloat(card.value)} />
+        headerNbr={card.parsedHeader} 
+        valueNbr={card.displayedValue} />
         </React.Fragment>)
       }</React.Fragment> : '';
   }

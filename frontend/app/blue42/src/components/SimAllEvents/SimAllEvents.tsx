@@ -8,23 +8,16 @@ import tbIcon from '../../assets/team-icons/TBB.png';
 import ssIcon from '../../assets/team-icons/SS.png';
 import GenericModal from '../GenericModal/GenericModal';
 import Blue42Btn from '../Blue42Btn/Blue42Btn';
-import {Game, OddCard, TestOdd} from '../../interfaces/interface';
-import {GamesService} from '../../services/game.service';
+import {Game, GameOdd, OddCard, TestOdd} from '../../interfaces/interface';
+import GamesService from '../../services/game.service';
 import {Observable, Subject} from 'rxjs';
 import GameOddService from '../../services/gameOdd.service';
+import { setConstantValue } from 'typescript';
 
 type Props = {
 }
 
 type State = {
-  testData: {
-    odds: TestOdd[],
-    category1Header: string,
-    category2Header: string,
-    category3Header: string,
-    eventDateStr: string,
-    eventTimeStr: string,
-  }
   selectedOdd: OddCard | null,
   createEventModalIsVisible: boolean,
 }
@@ -76,85 +69,28 @@ const AllEventsOverviewOddsCard = styled.div`
 
 }`;
 
-const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
-  let initialGames : Game[] = [];
-  const [games, setGames] = useState(initialGames);
-  const [testData, setTestData] = useState({
-    category1Header: 'Winner. Half 1',
-    category2Header: 'Total. Half 1',
-    category3Header: 'Handicap. Half 1',
-    eventDateStr: 'Nov 13',
-    eventTimeStr: '9:30',
-    odds : [
-      {
-        header: '1',
-        value: '-120',
-        isActive: false
-      },
-      {
-        header: 'X',
-        value: '830',
-        isActive: false
-      },
-      {
-        header: '2',
-        value: '123',
-        isActive: false
-      },
-      {
-        header: 'O 12.5',
-        value: '-118',
-        isActive: false
-      },
-      {
-        header: 'U 12.5',
-        value: '-118',
-        isActive: false
-      },
-      {
-        header: '1 -0.5',
-        value: '-122',
-        isActive: false
-      },
-      {
-        header: '2 +0.5',
-        value: '-118',
-        isActive: false
-      }
-    ]
-  });
+const initialGames : Game[] = [];
 
-  const [selectedOdd, setSelectedOdd] = useState<TestOdd | null>(null);
-  const [createEventModalIsVisible, setCreateEventModalIsVisible] = useState(false);
+const populateInitialState = () => {
+  return initialGames;
+};
+
+const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
+  const [games, setGames] = useState(populateInitialState);
+  
+  const [createEventModalIsVisible, setCreateEventModalIsVisible] = useState(() => false);
 
   useEffect(() => {
-    const subscription = GamesService.getGames()
+    GameOddService.init();
+    const gameOddSubscription = GameOddService.subscribe(handleOddCardChange);
+    GamesService.init();
 
-      .subscribe((promise: Promise<Game[]>) =>{
-        promise.then((retrievedGames: Game[]) => {
 
-          setGames(retrievedGames);
-
-        });
-
-        const gameOddSubscription = GameOddService.subscribe(handleOddCardChange);
-        //GameOddService.init();
-    
-        return () => {
-          gameOddSubscription.unsubscribe();
-          subscription.unsubscribe();
-        };
-
-      });
-
-    return () => subscription.unsubscribe();
+      return () => {
+        gameOddSubscription.unsubscribe();
+      };
   }, []);
   
-  const handleOddCardChange = (cards: OddCard[]) => {
-    //setOddCards(cards);
-  };
-
-
   const openCreateGameModal = () => {
     setCreateEventModalIsVisible(true);
   }
@@ -171,6 +107,11 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
     }
   }
 
+  const handleOddCardChange = (data: {managementCards: OddCard[], games: Game[]}) => {
+    setGames([...data.games]);
+
+  };
+
   const clickedOddsCard = (game: Game, index : number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
     for(let i = 0; i < game.oddCardMap.size; i++){
@@ -178,31 +119,33 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
       if (i === index){
         oddCard.isActive = !oddCard.isActive;
         if (oddCard.isActive){
+          
+          // Add handler that executes when the card gets closed in ManageOdd component 
+
+          oddCard.cardMode = oddCardIsEmpty(game, index) ? "add" : "update";
           GameOddService.addManagementCard(oddCard);
         }
         else{
-          GameOddService.removeManagementCard(oddCard);
+          GameOddService.removeManagementCard(oddCard.id as number);
         }
       }
-      else{
-        //oddCard.isActive = false;
-      }
 
-      game.oddCardMap.set(i, oddCard);
+   //   game.oddCardMap.set(i, oddCard);
     }
     
     setGames([...games]);
-    /*
-    let arr = testData.odds;
-    arr.filter((itm, itmIndex) => itmIndex !== index).forEach((odd) => {odd.isActive = false});
-    arr[index].isActive = !arr[index].isActive;
-    setTestData({...testData, odds: arr});
 
-    if (arr[index].isActive){
-      setSelectedOdd(arr[index]);
-    }
-    */
   }
+
+  const oddCardIsEmpty = (game: Game, index: number) => {
+    type ObjectKey = keyof typeof game.allGameOdds[0];
+    const key = game.oddCardMap.get(index)?.cardType.name as ObjectKey;
+    return game.allGameOdds[0] ? game.allGameOdds[0][key] ? false : true : true;
+
+
+  }
+
+
   const gamesUi = function() {
     return (
     <React.Fragment>
@@ -217,18 +160,18 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                 NFL
               </span>
               <div style={{position: 'absolute', right: '8em'}}>
-                {testData.eventDateStr} &#x2022; {testData.eventTimeStr}
+                {'Nov 13'} &#x2022; {'9:30'}
               </div>
             </div>
             <div className={styles.AllEventsOverviewHeadersRight}>
               <div className={styles.CategoryHeader} style={{flex: 3}}>
-                {testData.category1Header}
+                {'Winner. Half 1'}
               </div>
               <div className={styles.CategoryHeader} style={{flex: 2}}>
-                {testData.category2Header}
+                {'Total. Half 1'}
               </div>
               <div className={styles.CategoryHeader} style={{flex: 2}}>
-                {testData.category3Header}
+                {'Handicap. Half 1'}
               </div>
             </div>
           </div>
@@ -278,7 +221,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
                         key={game.id} 
                         onClick={(e) => clickedOddsCard(game, 3, e)} 
                           compVisibility={(game.allGameOdds[0] ? true : false)}
-                          isEmpty={game.allGameOdds[0] ? game.allGameOdds[0].overPayout ? false : true : true}
+                          isEmpty={oddCardIsEmpty(game, 3)}
                           odd={game.oddCardMap.get(3) as OddCard}
                         />
                   </div>

@@ -7,16 +7,22 @@ import {FiSave} from 'react-icons/fi';
 import {AiOutlineCloseCircle} from 'react-icons/ai'
 import {IoMdPulse} from 'react-icons/io';
 import Blue42Btn from '../Blue42Btn/Blue42Btn';
+import GameOddService from '../../services/gameOdd.service';
 
 type Props = {
   cardMode: "add" | "update",
   headerNbr: number,
-  valueNbr: number,
+  valueNbr: string,
+  id: number,
+  gameId: number,
 }
 
 type State = {
   updatingHeader: boolean,
   updatingValue: boolean,
+  headerNbr: number,
+  valueNbr: number,
+  hideLowerValue: boolean;
 }
 
 class ManageOdd extends React.Component{
@@ -25,12 +31,15 @@ class ManageOdd extends React.Component{
   headerRef: React.LegacyRef<HTMLInputElement> | undefined;
   valueRef: React.LegacyRef<HTMLInputElement> | undefined; 
 
-  constructor(props : any){
+  constructor(props : Props){
     super(props);
     this.headerRef = React.createRef();
     this.state = {
       updatingHeader: false,
       updatingValue: false,
+      headerNbr: props.cardMode === 'update' ? props.headerNbr : 0,
+      valueNbr: props.cardMode === 'update' ? Number.parseFloat(props.valueNbr) : 0,
+      hideLowerValue: props.cardMode === 'update' && props.valueNbr === ''
     }
     this.props = props;
     
@@ -49,7 +58,8 @@ class ManageOdd extends React.Component{
 
   cancelEditValue(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
     this.setState((state, props) => ({
-      updatingValue: false
+      updatingValue: false,
+      valueNbr: this.props.valueNbr,
     }));
   }
 
@@ -73,7 +83,27 @@ class ManageOdd extends React.Component{
 
   cancelEditHeader(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
     this.setState((state, props) => ({
-      updatingHeader: false
+      updatingHeader: false,
+      headerNbr: this.props.headerNbr,
+    }));
+  }
+
+  saveEditHeader(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
+    // TODO
+
+
+      GameOddService.saveManagementCard(this.props.id, this.state.headerNbr.toString(), null);
+      //this.closeCard(null as any);
+      this.setState((state, props) => ({
+        updatingHeader: false
+      }));
+  }
+
+  saveEditValue(evt: React.MouseEvent<HTMLDivElement, MouseEvent>){
+    GameOddService.saveManagementCard(this.props.id, null, this.state.valueNbr.toString());
+
+    this.setState((state, props) => ({
+      updatingValue: false
     }));
   }
 
@@ -85,7 +115,7 @@ class ManageOdd extends React.Component{
   }
 
   closeCard(e: React.MouseEvent<HTMLDivElement, MouseEvent>){
-
+    GameOddService.removeManagementCard(this.props.id)
   }
 
   render(): React.ReactNode {
@@ -100,14 +130,14 @@ class ManageOdd extends React.Component{
             <div className={styles.CardOddHeader}>
               <div>
                 Over&nbsp;
-                {!this.state.updatingHeader && this.props.cardMode === 'update' && <React.Fragment><span>{this.props.headerNbr}</span></React.Fragment>} 
+                {!this.state.updatingHeader && this.props.cardMode === 'update' && <React.Fragment><span>{this.state.headerNbr}</span></React.Fragment>} 
                 {(this.state.updatingHeader || this.props.cardMode === 'add') && <React.Fragment>
                   <span>
                     <input 
                     type="number"
                     ref={this.headerRef}
                     name="headerNbr"
-                    value={this.props.headerNbr}
+                    value={this.state.headerNbr}
                     onChange={(e) => {this.headerNbrChanged(e)}}
                     style={{width: '5ch', borderRadius: '8px', color: 'white', background: '#614F5D', fontSize: '1.03rem', textAlign: 'center'}} 
                     maxLength={5}>
@@ -120,7 +150,7 @@ class ManageOdd extends React.Component{
                   {
                     this.state.updatingHeader &&
                     <React.Fragment>
-                      <div onClick={(evt => {this.cancelEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div onClick={(evt => {this.saveEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FiSave />
                       </div>
                       <div onClick={(evt => {this.cancelEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
@@ -146,20 +176,22 @@ class ManageOdd extends React.Component{
               <GiAmericanFootballBall />
             </div>
           </div>
-          <div className={styles.CardOddValue}>
+          {
+            !this.state.hideLowerValue &&
+            <div className={styles.CardOddValue}>
             <div className={styles.CardOddData}>
               <div>
                 <IoMdPulse />
               </div>
               <div className={styles.CardOddDataValue}>
-                {!this.state.updatingValue && this.props.cardMode === 'update' && <React.Fragment><span>{this.props.valueNbr}</span></React.Fragment>} 
+                {!this.state.updatingValue && this.props.cardMode === 'update' && <React.Fragment><span>{this.state.valueNbr}</span></React.Fragment>} 
                 {(this.state.updatingValue || this.props.cardMode === 'add') && <React.Fragment>
                   <span>
                     <input 
                     type="number"
                     ref={this.valueRef}
                     name="valueNbr"
-                    value={this.props.valueNbr}
+                    value={this.state.valueNbr}
                     onChange={(e) => {this.valueNbrChanged(e)}}
                     style={{width: '5ch', borderRadius: '8px', color: 'white', background: '#614F5D', fontSize: '1.03rem', textAlign: 'center'}} 
                     maxLength={5}>
@@ -173,7 +205,7 @@ class ManageOdd extends React.Component{
                   {
                     this.state.updatingValue && 
                     <React.Fragment>
-                      <div onClick={(evt => {this.cancelEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div onClick={(evt => {this.saveEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FiSave />
                       </div>
                       <div onClick={(evt => {this.cancelEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
@@ -191,13 +223,17 @@ class ManageOdd extends React.Component{
                   }
                 </React.Fragment>
               }
+              </div>
             </div>
-          </div>
-          <div style={{display: 'flex', justifyContent:'center', transform: 'scale(.8)'}}>
-            <div style={{marginTop: '1em'}}>
-              <Blue42Btn onClick={(event) => {}} btnText={'Create'} />
+          }
+          {
+            this.props.cardMode === 'add' && 
+            <div style={{display: 'flex', justifyContent:'center', transform: 'scale(.8)'}}>
+              <div style={{marginTop: '1em'}}>
+                <Blue42Btn onClick={(event) => {}} btnText={'Create'} />
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     );

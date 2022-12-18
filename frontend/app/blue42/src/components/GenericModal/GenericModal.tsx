@@ -20,19 +20,6 @@ export default class GenericModal extends React.Component{
 
   handleModalCallback(callBack: (() => Promise<unknown>)){
     this.props.onCloseModal(callBack)
-    /*
-    if (callBack){
-      console.log("has call back. calling it");
-      callBack
-        .then((res) => {
-          console.log({"res":res})
-          console.log("callback completed.");
-        });
-    }
-    else{
-      console.log("did not return a callback")
-    }
-    */
   }
 
   render(){
