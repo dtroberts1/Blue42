@@ -139,11 +139,8 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
   }
 
   const oddCardIsEmpty = (game: Game, index: number) => {
-    console.log({"index":index})
-    console.log({"game.allGameOdds[0]":game.allGameOdds[0]})
     type ObjectKey = keyof typeof game.allGameOdds[0];
     const key = game.oddCardMap.get(index)?.cardType.name as ObjectKey;
-    console.log({"key":key})
     return game.allGameOdds[0] ? game.allGameOdds[0][key] ? false : true : true;
 
 
