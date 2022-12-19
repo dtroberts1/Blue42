@@ -11,9 +11,12 @@ import moment from 'moment';
 import "react-toggle/style.css" // for ES6 modules
 import Toggle from 'react-toggle'
 import Blue42Btn from '../Blue42Btn/Blue42Btn';
-import {Team, Venue} from '../../interfaces/interface';
+import {Game, GameOdd, Team, Venue} from '../../interfaces/interface';
 import TeamsService from '../../services/team.service';
-
+import { Grid } from  'react-loader-spinner'
+import GamesService from '../../services/game.service';
+import GameOddService from '../../services/gameOdd.service';
+/*import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";*/
 type Props = {
   callBack(promise: (() => Promise<unknown>) | null): unknown;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void,
@@ -26,6 +29,10 @@ type State = {
   seedOdds: boolean,
   teams: Team[],
   venues: {name: string}[]
+  isLoading: boolean,
+  selectedCompetitor1: Team | null,
+  selectedCompetitor2: Team | null,
+  selectedVenue: {name: string} | null,
 }
 
 
@@ -113,6 +120,10 @@ export default class CreateGameModalContent extends React.Component{
       seedOdds: true,
       teams: TeamsService.getTeams(),
       venues: [],
+      isLoading: false,
+      selectedCompetitor1: null,
+      selectedCompetitor2: null,
+      selectedVenue: null,
     };
   }
 
@@ -135,8 +146,16 @@ export default class CreateGameModalContent extends React.Component{
     
 
     this.setState((state : State, props: Props) => ({
-      venues : [...tmpVenues]
+      venues : [...tmpVenues],
+      selectedCompetitor1: competitorNbr === 0 ? team : (this.state.selectedCompetitor1 ?? null),
+      selectedCompetitor2: competitorNbr === 1 ? team : (this.state.selectedCompetitor2 ?? null),
     }))
+  }
+
+  venueSelected(venue : Venue){
+    this.setState((state: State, props: Props) => ({
+      selectedVenue: this.state.venues.find(v => v.name === venue.name)
+    }));
   }
 
   timeSelected(time : {name: string}){
@@ -167,10 +186,6 @@ export default class CreateGameModalContent extends React.Component{
         date: currDate
       }));
     }, 0)
-  }
-
-  venueSelected(venue : Venue){
-    
   }
 
   dateChanged(date : Date, evt: Event){
@@ -213,18 +228,78 @@ export default class CreateGameModalContent extends React.Component{
   }
 
   async closeModal(withData: boolean){
-    if (withData){
+    if (withData && this.state.selectedCompetitor1 && this.state.selectedCompetitor2){
       // Send callback, which will be invoked by parent component
-      let promise = () => {
-        return new Promise((resolve, reject) => {
-          // Write Backend calls here (TODO)
-          //
-          //
-          //
-          resolve(true);
-        })
-      };
-      this.props.callBack(promise);
+
+      this.setState((state: State, props: Props) => ({
+        isLoading: true
+      }));
+
+      console.log({"this.state":this.state})
+      let homeTeam = this.state.selectedCompetitor1.venue.name === this.venueSelected.name ? 
+        this.state.selectedCompetitor1 : this.state.selectedCompetitor2;
+
+      let awayTeam = this.state.selectedCompetitor1.id === homeTeam.id ? 
+        this.state.selectedCompetitor2 : this.state.selectedCompetitor1;
+        
+      let newGame : Game = {
+        id: -1,
+        dateTime: this.state.date,
+        season: -1,
+        status: {id: 2, statusText: 'Scheduled'},
+        seasonType: 1,
+        apiWeek: -1,
+        allGameOdds: [],
+        oddCardMap: new Map(),
+        homeTeam: homeTeam,
+        awayTeam: awayTeam,
+      }
+
+      GamesService.post(newGame)
+        .subscribe(async (response: Response) => {
+          console.log({"response":response})
+          let gameId = await response.json();
+          console.log({"gameId":gameId})
+          
+          let newGameOdd : GameOdd = {
+            awayMoneyLine: this.state.seedOdds ? -204 : -1,
+            homeMoneyLine: this.state.seedOdds? 212 : -1,
+            drawMoneyLine: this.state.seedOdds ? 830 : -1,
+            homePointSpread: this.state.seedOdds ? -3.5 : -1,
+            homePointSpreadPayout: this.state.seedOdds ? -130 : -1,
+            awayPointSpread: this.state.seedOdds ? 3.5 : -1,
+            awayPointSpreadPayout: this.state.seedOdds ? -109 : -1,
+            overPayout: this.state.seedOdds ? -120 : -1,
+            overUnder: this.state.seedOdds ? 19.5 : -1,
+            underPayout: this.state.seedOdds ? -115 : -1,
+            oddType: 'pregame',
+            created: this.state.date,
+            updated: this.state.date,
+            gameId: gameId,
+            game: {
+              ...newGame,
+              id: gameId,
+            },
+            book: {
+              id: 1,
+            },
+
+          }
+          GameOddService.createNewGameOdd(newGameOdd)
+            .subscribe((res: Response) => {
+              console.log({"createNewGameOddResponse":res});
+            })
+        });
+      
+
+      setTimeout(() => {
+        this.setState((state: State, props: Props) => ({
+          isLoading: false
+        }));
+        this.props.callBack(null);
+
+
+      }, 800)
     }
     else{
       this.props.callBack(null);
@@ -233,105 +308,119 @@ export default class CreateGameModalContent extends React.Component{
 
   render(){
     return(
-      <div className={styles.CreateGameModalContent}>
-        <div className={styles.SectionLabel}>
-          Competitors
+      <React.Fragment>
+        <div style={{display: (!this.state.isLoading ? 'none': 'flex'), width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+          <Grid
+            height="80"
+            width="80"
+            color="#7747e5"
+            ariaLabel="grid-loading"
+            radius="12.5"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
         </div>
-        <div style={{position: 'absolute', display: 'flex', paddingTop: '1em'}}>
-          <div style={{zIndex: '2'}}>
-            <div 
-              className={styles.CompetitorDropdown}>
-              <GenericDropdown 
-                hasTooltips={false}
-                data={this.state.teams} 
-                hasLabel={true}     
-                hasImages={true}        
-                handleSelectedEntity={(team: Team) => {this.teamSelected(0, team)}}
-                labelName={'Competitor #1'}/>
-            </div>
+        <div className={styles.CreateGameModalContent} style={{display: (this.state.isLoading ? 'none': 'initial')}}>
+          <div className={styles.SectionLabel}>
+            Competitors
           </div>
-          <div style={{zIndex: '2'}}>
-            <div  
-              className={styles.CompetitorDropdown}>
-              <GenericDropdown 
-              data={this.state.teams}
-              hasTooltips={false}
-              hasLabel={true}  
-              hasImages={true}           
-              handleSelectedEntity={(team: Team) => {this.teamSelected(1, team)}}
-              labelName={'Competitor #2'}/>
-            </div>
-          </div>
-        </div>
-        <div className={styles.SectionSeparator}>
-        </div>
-        <div className={styles.Section} style={{top: '6.5em'}}>
-          <div>
-            Date & Time
-          </div>
-          <div style={{marginTop:'.5em', alignItems: 'center', display: 'flex', position: 'relative'}}>
-            <BsFillCalendarWeekFill tabIndex={1} onClick={(evt: React.MouseEvent<SVGElement, MouseEvent>) => {this.openCalendarView(evt)}} className={styles.CalendarIcon}/>
-            <span style={{marginLeft: '1ch'}}>{this.state.date.toLocaleString()}</span>
-            <span style={{position: 'relative'}} tabIndex={1} onClick={(evt) => {this.setState({editTimeMode: true})}} className={styles.ClockIcon}>
-            <BsClock />
-              <div  
-                style={{position: 'absolute', top: '-.48em', left: '-30px', zIndex: '1', visibility: (this.state.editTimeMode ? 'visible' : 'hidden')}}
-                className={styles.TimeDropdown}>
+          <div style={{position: 'absolute', display: 'flex', paddingTop: '1em'}}>
+            <div style={{zIndex: '2'}}>
+              <div 
+                className={styles.CompetitorDropdown}>
                 <GenericDropdown 
-                  data={hours}
+                  hasTooltips={false}
+                  data={this.state.teams} 
+                  hasLabel={true}     
+                  hasImages={true}        
+                  handleSelectedEntity={(team: Team) => {this.teamSelected(0, team)}}
+                  labelName={'Competitor #1'}/>
+              </div>
+            </div>
+            <div style={{zIndex: '2'}}>
+              <div  
+                className={styles.CompetitorDropdown}>
+                <GenericDropdown 
+                data={this.state.teams}
+                hasTooltips={false}
+                hasLabel={true}  
+                hasImages={true}           
+                handleSelectedEntity={(team: Team) => {this.teamSelected(1, team)}}
+                labelName={'Competitor #2'}/>
+              </div>
+            </div>
+          </div>
+          <div className={styles.SectionSeparator}>
+          </div>
+          <div className={styles.Section} style={{top: '6.5em'}}>
+            <div>
+              Date & Time
+            </div>
+            <div style={{marginTop:'.5em', alignItems: 'center', display: 'flex', position: 'relative'}}>
+              <BsFillCalendarWeekFill tabIndex={1} onClick={(evt: React.MouseEvent<SVGElement, MouseEvent>) => {this.openCalendarView(evt)}} className={styles.CalendarIcon}/>
+              <span style={{marginLeft: '1ch'}}>{this.state.date.toLocaleString()}</span>
+              <span style={{position: 'relative'}} tabIndex={1} onClick={(evt) => {this.setState({editTimeMode: true})}} className={styles.ClockIcon}>
+              <BsClock />
+                <div  
+                  style={{position: 'absolute', top: '-.48em', left: '-30px', zIndex: '1', visibility: (this.state.editTimeMode ? 'visible' : 'hidden')}}
+                  className={styles.TimeDropdown}>
+                  <GenericDropdown 
+                    data={hours}
+                    hasTooltips={false}
+                    hasLabel={false}             
+                    hasImages={false}
+                    handleSelectedEntity={(time) => {this.timeSelected(time)}}
+                  />
+                </div>
+              </span>
+            </div>
+            <CalendarContainer>
+              <div style={{position: 'relative'}}>
+                <div ref={this.calendarRef} onBlur={(evt) => {this.blurCalendar(evt)}}  tabIndex={1} 
+                style={{zIndex:'2', position:'fixed', top: '22em', visibility: this.state.calendarOpened ? 'visible' : 'hidden'}}>
+                  <Calendar onChange={(date: Date, evt: any) =>{this.dateChanged(date, evt)}} value={this.state.date}/>
+                </div>
+              </div>            
+            </CalendarContainer>
+
+          </div>
+          <div style={{width: '100%', height: '7em'}}>
+          </div>
+          <div className={styles.Section} style={{top: '12.5em'}}>
+            <div>
+              Venue
+            </div>
+            <div style={{position: 'relative'}}>
+              <div  
+                  style={{position: 'absolute', top: '.38em', left: '0', zIndex: '1', marginLeft: '0'}}
+                  className={styles.VenueDropdown}>
+                  <GenericDropdown data={this.state.venues}
                   hasTooltips={false}
                   hasLabel={false}             
                   hasImages={false}
-                  handleSelectedEntity={(time) => {this.timeSelected(time)}}
-                />
-              </div>
-            </span>
+                  handleSelectedEntity={(venue) => {this.venueSelected(venue)}}
+                  />
+                </div>
+                <div style={{position: 'absolute', top: '4em', height: '2em', display: 'flex'}}>
+                  <label>
+                    <Toggle
+                      defaultChecked={this.state.seedOdds}
+                      className={styles.SeedCheckbox}
+                      onChange={(evt : ChangeEvent<HTMLInputElement>) => {this.handleOddsChange(evt)}} />
+                    <div style={{height: '100%', float: 'right', paddingLeft: '1ch'}}>Seed Odds</div>
+                  </label>
+                </div>
+            </div>
           </div>
-          <CalendarContainer>
-            <div style={{position: 'relative'}}>
-              <div ref={this.calendarRef} onBlur={(evt) => {this.blurCalendar(evt)}}  tabIndex={1} 
-              style={{zIndex:'2', position:'fixed', top: '22em', visibility: this.state.calendarOpened ? 'visible' : 'hidden'}}>
-                <Calendar onChange={(date: Date, evt: any) =>{this.dateChanged(date, evt)}} value={this.state.date}/>
-              </div>
-            </div>            
-          </CalendarContainer>
-
-        </div>
-        <div style={{width: '100%', height: '7em'}}>
-        </div>
-        <div className={styles.Section} style={{top: '12.5em'}}>
-          <div>
-            Venue
-          </div>
-          <div style={{position: 'relative'}}>
-            <div  
-                style={{position: 'absolute', top: '.38em', left: '0', zIndex: '1', marginLeft: '0'}}
-                className={styles.VenueDropdown}>
-                <GenericDropdown data={this.state.venues}
-                hasTooltips={false}
-                hasLabel={false}             
-                hasImages={false}
-                handleSelectedEntity={(venue) => {this.venueSelected(venue)}}
-                />
-              </div>
-              <div style={{position: 'absolute', top: '4em', height: '2em', display: 'flex'}}>
-                <label>
-                  <Toggle
-                    defaultChecked={this.state.seedOdds}
-                    className={styles.SeedCheckbox}
-                    onChange={(evt : ChangeEvent<HTMLInputElement>) => {this.handleOddsChange(evt)}} />
-                  <div style={{height: '100%', float: 'right', paddingLeft: '1ch'}}>Seed Odds</div>
-                </label>
-              </div>
+          <div style={{width: '100%', height: '3em', position: 'absolute', bottom: '0'}}>
+            <div style={{position: 'relative', display: 'flex', justifyContent: 'center', gap: '1.5ch'}}>
+              <Blue42Btn onClick={() => {this.closeModal(true)}} btnText={'Create'} className={styles.Blue42BtnClass} isSecondary={false}  />
+              <Blue42Btn onClick={() => {this.closeModal(false)}} btnText={'Cancel'} className={styles.Blue42BtnClass} isSecondary={true} />
+            </div>
           </div>
         </div>
-        <div style={{width: '100%', height: '3em', position: 'absolute', bottom: '0'}}>
-          <div style={{position: 'relative', display: 'flex', justifyContent: 'center', gap: '1.5ch'}}>
-            <Blue42Btn onClick={() => {this.closeModal(true)}} btnText={'Create'} className={styles.Blue42BtnClass} isSecondary={false}  />
-            <Blue42Btn onClick={() => {this.closeModal(false)}} btnText={'Cancel'} className={styles.Blue42BtnClass} isSecondary={true} />
-          </div>
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

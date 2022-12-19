@@ -18,7 +18,7 @@ export interface GameOdd{
     awayPointSpread: number;
     homePointSpreadPayout: number;
     awayPointSpreadPayout: number;
-    oddType: string;
+    oddType: 'pregame' | 'live' | '1st-qtr' | '2nd-qtr' | '3rd-qtr' | '4th-qtr';
     overUnder: number;
     overPayout: number;
     underPayout: number;
@@ -41,7 +41,7 @@ export interface TestOdd {
   }
 export interface Status{
     id: number;
-    statusText: string;
+    statusText: 'Final' | 'Scheduled';
 }
 
 export interface CardType{

@@ -1,75 +1,81 @@
-.SimAllEvents {
+.SimAllEventsContainer{
+    position: relative;
+    
+    .SimAllEvents {
+        max-height: calc(100vh - calc(2em + (calc(34px + (2em + calc(7vh + calc(180px + 1.65em)))))));
+        overflow-y: auto;
 
-    div{
-        .AllEventsOverviewHeaders{
-            display: flex;
-            align-items: center;
-            margin: 0.5em 0;
-            border-radius: 8px;
-            height: 2.7em;
-            background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important;
-
-            .AllEventsOverviewHeadersLeft{
-                width: 50%;
+        div{
+            .AllEventsOverviewHeaders{
                 display: flex;
                 align-items: center;
-                float: left;
-                position: relative;
-
-                .AllEventsNFLIconContainer{
-                    display: inline-block !important;
-                    transform: scale(.6);
-            
-                    img{
-                        transform: scale(.7);
+                margin: 0.5em 0;
+                border-radius: 8px;
+                height: 2.7em;
+                background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important;
+    
+                .AllEventsOverviewHeadersLeft{
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    float: left;
+                    position: relative;
+    
+                    .AllEventsNFLIconContainer{
+                        display: inline-block !important;
+                        transform: scale(.6);
+                
+                        img{
+                            transform: scale(.7);
+                        }
+                    }
+    
+                    span{
+                        margin-left: -1ch;
                     }
                 }
-
-                span{
-                    margin-left: -1ch;
-                }
-            }
-
-            .AllEventsOverviewHeadersRight{
-                width: 50%;
-                display: flex;
-                align-items: center;
-                float: right;
-
-                .CategoryHeader{
-                    text-align: center;
-                }
-            }
-        }
-        .AllEventsOverviewData{
-            display: flex;
-
-            .AllEventsOverviewOddsCell{
-                display: flex;
-                justify-content: space-evenly;
-
-            }
-        }
-    }
-
-    .CreateGameModalBtn{
-        background-color: #7747e5;
-        border-radius: 8px;
-        line-height: 1.3em;
-        font-size: 1.1rem;
-        text-align: center;
-        position: relative;
-        width: fit-content;
-        height: initial;
-        padding: 0.4em;
-
-        &:hover{
-            cursor: pointer;
-        }
-    }
-
     
-    .Blue42BtnClass{
-        width: 7.5em !important;
+                .AllEventsOverviewHeadersRight{
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    float: right;
+    
+                    .CategoryHeader{
+                        text-align: center;
+                    }
+                }
+            }
+            .AllEventsOverviewData{
+                display: flex;
+    
+                .AllEventsOverviewOddsCell{
+                    display: flex;
+                    justify-content: space-evenly;
+    
+                }
+            }
+        }
+    
+        .CreateGameModalBtn{
+            background-color: #7747e5;
+            border-radius: 8px;
+            line-height: 1.3em;
+            font-size: 1.1rem;
+            text-align: center;
+            position: relative;
+            width: fit-content;
+            height: initial;
+            padding: 0.4em;
+    
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    
+        
+        .Blue42BtnClass{
+            width: 7.5em !important;
+        }
     }
 }

@@ -36,13 +36,12 @@ const AllEventsOverviewOddsCard = styled.div`
   position: relative;
   width: 2.6em;
   height: 2.5em;
-  filter: brightness(${(props: AllEventsOverviewOddsCardProp) => (props.odd.isActive ? 1.8 : 1)});
+  filter: brightness(${(props: AllEventsOverviewOddsCardProp) => (props.odd.isActive ? 1.9 : 1)});
   background: ${(props) => (props.odd.isActive ? 'linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important' : '#271b2f')};
 
   &:hover{
-      filter: brightness(1.8);
       cursor: pointer;
-      background: linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important
+      background: blueviolet;
   }
 
   &::before{
@@ -274,19 +273,24 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
   }
 
   return (
-    <div className={styles.SimAllEvents}>
-          <React.Fragment>
-          {gamesUi()}
-        </React.Fragment>
-      <Blue42Btn onClick={(event) => {openCreateGameModal()}} btnText={'Create Event'} className={styles.Blue42BtnClass} />
-
+    <div className={styles.SimAllEventsContainer}>
+      <div className={styles.SimAllEvents}>
+            <React.Fragment>
+            {gamesUi()}
+          </React.Fragment>
+          <div style={{position: 'absolute', bottom: '-2.4em'}}>
+              <Blue42Btn onClick={(event) => {openCreateGameModal()}} 
+            btnText={'Create Event'} 
+            className={styles.Blue42BtnClass} />
+          </div>
+      </div>
       {
-        createEventModalIsVisible &&
-          <GenericModal
-          onCloseModal={(promise: () => Promise<any>) => {closeCreateModal(promise)}}
-          title="Create Game"
-          />
-      }
+          createEventModalIsVisible &&
+            <GenericModal
+            onCloseModal={(promise: () => Promise<any>) => {closeCreateModal(promise)}}
+            title="Create Game"
+            />
+        }
     </div>
   ); 
   

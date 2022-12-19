@@ -1,5 +1,5 @@
 import {fromFetch} from 'rxjs/fetch';
-import {Observable, BehaviorSubject, map, Subject, Observer} from 'rxjs';
+import {Observable, BehaviorSubject, map, Subject, Observer, tap} from 'rxjs';
 import teamIconMapJson from '../assets/team-icons/team_icon_map.json';
 import { CardType, Game, GameOdd, OddCard } from '../interfaces/interface';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +32,20 @@ const oddCardIsEmpty = (game: Game | undefined, card : OddCard) => {
 
 function joinURL(baseURL : string, url: string){
     return `${baseURL}/${url}`;
+}
+
+const request = (url : string, method : string ="POST", data: any | null = null) => {
+    url = joinURL(domain, url);
+    let reqInit : RequestInit = {
+        headers: headers,
+        method: method,
+    }
+    if (data){
+        reqInit.body = JSON.stringify({...data});
+    }
+
+    let req = new Request(url, reqInit);
+    return fromFetch(req)
 }
 
 let state = initialState;
@@ -203,6 +217,22 @@ const GameOddService = {
                     );
             }
         }
+    },
+
+    createNewGameOdd: (data: GameOdd) => {
+        let url = 'gameodds/postGameOdd'
+        console.log({"url":url})
+        console.log({"data":data});
+
+        const method = 'POST';
+        
+        return request(url, method, data)
+            .pipe(
+                tap((itm) => {
+                    console.log({"itm":itm}) 
+                    GamesService.init();
+                })
+            );
     },
     initialState
 }
