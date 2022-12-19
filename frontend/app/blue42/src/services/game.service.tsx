@@ -1,5 +1,5 @@
 import {fromFetch} from 'rxjs/fetch';
-import {Observable, BehaviorSubject, map, Subject} from 'rxjs';
+import {Observable, BehaviorSubject, map, Subject, tap} from 'rxjs';
 import { Game, OddCard, TeamIcon } from '../interfaces/interface';
 import teamIconMapJson from '../assets/team-icons/team_icon_map.json';
 import { v4 } from 'uuid';
@@ -41,7 +41,21 @@ const initialState : InitialState = {
 };
 let state = initialState;
 
-const request = (url : string, method : string ="POST", data: any[] | null = null) => {
+const request = (url : string, method : string ="POST", data: any | null = null) => {
+    url = joinURL(domain, url);
+    let reqInit : RequestInit = {
+        headers: headers,
+        method: method,
+    }
+    if (data){
+        reqInit.body = JSON.stringify({...data});
+    }
+
+    let req = new Request(url, reqInit);
+    return fromFetch(req)
+}
+
+const requestFullGames = (url : string, method : string ="POST", data: any[] | null = null) => {
     url = joinURL(domain, url);
     let reqInit : RequestInit = {
         headers: headers,
@@ -120,9 +134,9 @@ const request = (url : string, method : string ="POST", data: any[] | null = nul
                         )
                         .set(
                             3, {
-                                header: 'O ' + (game.allGameOdds[0].overUnder ? game.allGameOdds[0].overUnder?.toString() : "") ,
+                                header: 'O ' + (game.allGameOdds[0]?.overUnder ? game.allGameOdds[0]?.overUnder?.toString() : "") ,
                                 parsedHeader: game.allGameOdds[0]?.overUnder ?? -1,
-                                value: game.allGameOdds[0]? game.allGameOdds[0].overPayout?.toString() : "",
+                                value: game.allGameOdds[0] ? game.allGameOdds[0].overPayout?.toString() : "",
                                 displayedValue: game.allGameOdds[0]? game.allGameOdds[0].overPayout?.toString() : "",
                                 isActive: state.games[index]?.oddCardMap?.get(3)?.isActive ?? false,
                                 id: cyrb53(`${game.id}_${'overPayout'}`),
@@ -207,7 +221,7 @@ const GamesService = {
     init: () => {
         const method = 'GET';
         let url = 'games/allGames'
-        request(url, method)
+        requestFullGames(url, method)
             .subscribe(
                 async (resultGamesPromise : Promise<Game[]>) => {
                     let resultGames = await resultGamesPromise;
@@ -221,15 +235,23 @@ const GamesService = {
 
                 }
             );
-
-        //subject.next({...initialState});
     },
 
     subscribe: (setState: any) => subject.subscribe(setState),
 
-    post : (url : string, data: any) => {
+    post : (data: Game) => {
+        let url = 'games/postGame'
+        console.log({"url":url})
+        console.log({"data":data});
+
         const method = 'POST';
-        return request(url, method, data);
+        
+        return request(url, method, data)
+            .pipe(
+                tap((itm) => {
+                    console.log({"itm":itm}) 
+                })
+            );
     },
 
     getGames : () => {
