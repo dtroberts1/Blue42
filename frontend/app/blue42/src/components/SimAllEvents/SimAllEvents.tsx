@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import './SimAllEvents.less';
 import styles from './SimAllEvents.less';
 import nflIcon from '../../assets/images/nfl_logo.png';
-import styled from 'styled-components';
-import tbIcon from '../../assets/team-icons/TBB.png';
-import ssIcon from '../../assets/team-icons/SS.png';
 import GenericModal from '../GenericModal/GenericModal';
 import Blue42Btn from '../Blue42Btn/Blue42Btn';
 import {Game, GameOdd, OddCard, TestOdd} from '../../interfaces/interface';
@@ -13,6 +10,7 @@ import GamesService from '../../services/game.service';
 import {Observable, Subject} from 'rxjs';
 import GameOddService from '../../services/gameOdd.service';
 import { setConstantValue } from 'typescript';
+import AllEventsOverviewOddsCard from './AllEventsOverviewOddsCard';
 
 type Props = {
 }
@@ -21,52 +19,6 @@ type State = {
   selectedOdd: OddCard | null,
   createEventModalIsVisible: boolean,
 }
-
-type AllEventsOverviewOddsCardProp = {
-  odd: OddCard,
-  compVisibility : boolean,
-  isEmpty ?: boolean,
-}
-
-const AllEventsOverviewOddsCard = styled.div`
-  padding: .6em 1.4em;
-  visibility: ${(props: AllEventsOverviewOddsCardProp) => (props.compVisibility ? 'visible' : 'hidden')};
-  font-size: .9rem;
-  border-radius: 8px;
-  position: relative;
-  width: 2.6em;
-  height: 2.5em;
-  filter: brightness(${(props: AllEventsOverviewOddsCardProp) => (props.odd.isActive ? 1.9 : 1)});
-  background: ${(props) => (props.odd.isActive ? 'linear-gradient(90deg, rgba(55, 0, 179, 0.3) 0%, rgba(98, 41, 229, 0.3) 100%), rgba(255, 255, 255, 0.1) !important' : '#271b2f')};
-
-  &:hover{
-      cursor: pointer;
-      background: blueviolet;
-  }
-
-  &::before{
-      content: "${props => !props.isEmpty ? props.odd.header : ''}";
-      position: absolute;
-      top: .23em;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      font-weight: 500;
-
-  }
-
-  &::after{
-    content: "${props => !props.isEmpty ? props.odd.value : 'Add'}";
-    position: absolute;
-    left: 0;
-    bottom: ${props => !props.isEmpty ? '.38em !important' : '35% !important'};
-    width: 100%;
-    text-align: center;
-    font-weight: 500;
-
-  }
-
-}`;
 
 const initialGames : Game[] = [];
 
@@ -83,14 +35,13 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
     GameOddService.init();
     const gameOddSubscription = GameOddService.subscribe(handleOddCardChange);
     GamesService.init();
-
-
       return () => {
         gameOddSubscription.unsubscribe();
       };
   }, []);
   
   const openCreateGameModal = () => {
+    console.log("in openCreateGameModal!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     setCreateEventModalIsVisible(true);
   }
   
@@ -107,6 +58,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
   }
 
   const handleOddCardChange = (data: {managementCards: OddCard[], games: Game[]}) => {
+    console.log({"data":data})
     setGames([...data.games]);
 
   };
@@ -141,8 +93,6 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
     type ObjectKey = keyof typeof game.allGameOdds[0];
     const key = game.oddCardMap.get(index)?.cardType.name as ObjectKey;
     return game.allGameOdds[0] ? game.allGameOdds[0][key] ? false : true : true;
-
-
   }
 
 
@@ -183,7 +133,7 @@ const SimAllEvents : (props: Props) => JSX.Element = (props : Props) => {
             </div>
             <div style={{display: 'flex', flex: 1}}>
               <div className={styles.AllEventsOverviewOddsCell} style={{flex: 3}}>
-                <div>
+                <div role="gridcell">
                   <div style={{position: 'relative'}}>
                   <AllEventsOverviewOddsCard 
                         key={game.id} 

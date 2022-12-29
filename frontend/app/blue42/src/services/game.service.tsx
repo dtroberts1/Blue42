@@ -2,6 +2,7 @@ import {fromFetch} from 'rxjs/fetch';
 import {Observable, BehaviorSubject, map, Subject, tap} from 'rxjs';
 import { Game, OddCard, TeamIcon } from '../interfaces/interface';
 import teamIconMapJson from '../assets/team-icons/team_icon_map.json';
+import {importFi} from '../ImportFi';
 import { v4 } from 'uuid';
 import { json } from 'stream/consumers';
 
@@ -24,7 +25,7 @@ type InitialState = {
     games: Game[],
 }
 const subject = new Subject<InitialState>();
-const images = require.context('../../src/assets/team-icons', true);
+const images = require.context('../assets/team-icons', true);// importFi.importFiles();
 
 
 const headers = {

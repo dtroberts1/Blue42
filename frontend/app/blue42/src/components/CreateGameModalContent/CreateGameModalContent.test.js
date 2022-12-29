@@ -1,9 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import CreateGameModalContent from './CreateGameModalContent';
 
+/*
+jest.mock('../../importFi', () => ({
+  importFiles: any => {
+    return null;
+  }
+}));
+*/
 it('It should mount', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<CreateGameModalContent />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = ReactDOM.createRoot(div);
+
+  root.render(<CreateGameModalContent />);
 });

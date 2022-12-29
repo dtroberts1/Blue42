@@ -16,12 +16,17 @@ class Blue42Btn extends React.Component{
   }
 
   clickedBtn(event : React.MouseEvent<HTMLElement>){
-    this.props.onClick(event);
+    if (this.props.onClick){
+      this.props.onClick(event);
+    }
   }
 
   render(){
     return (
-      <div tabIndex={1} onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickedBtn(event)}} className={styles.ActionBtn + (this.props.isSecondary ? ' ' + styles.SectionaryBtn : '') + (this.props.className ? ' ' + this.props.className : '')}>
+      <div tabIndex={1} 
+      role="button"
+        onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickedBtn(event)}} 
+        className={styles.ActionBtn + (this.props.isSecondary ? ' ' + styles.SectionaryBtn : '') + (this.props.className ? ' ' + this.props.className : '')}>
         {this.props.btnText}
       </div>
     );

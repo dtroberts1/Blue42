@@ -30,7 +30,7 @@ type State = {
   }[],
 }
 
-export class GenericDropdown extends React.Component{
+class GenericDropdown extends React.Component{
   loaded: boolean = false;
   state: State;
   props: Props;
@@ -117,7 +117,7 @@ export class GenericDropdown extends React.Component{
           {
             /* If Dropdown Image should be displayed */
             this.props.hasImages &&
-            <div className={styles.ImgSelectorItemImg}><img src={this.state.selectedEntity.imagePath}/></div>
+            <div className={styles.ImgSelectorItemImg}><img src={this.state.selectedEntity?.imagePath ?? ''}/></div>
           }
           <div className={styles.ImgSelectorItemValue + ' ' + (this.props.hasImages ? styles.hasImages : '')}><div data-tip={this.state.selectedEntity?.name} data-class={styles.ToolTipClass}>
           {this.state.selectedEntity?.name} 
@@ -138,3 +138,5 @@ export class GenericDropdown extends React.Component{
     );
   }
 }
+
+export default GenericDropdown;

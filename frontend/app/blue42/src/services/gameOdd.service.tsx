@@ -221,15 +221,12 @@ const GameOddService = {
 
     createNewGameOdd: (data: GameOdd) => {
         let url = 'gameodds/postGameOdd'
-        console.log({"url":url})
-        console.log({"data":data});
 
         const method = 'POST';
         
         return request(url, method, data)
             .pipe(
                 tap((itm) => {
-                    console.log({"itm":itm}) 
                     GamesService.init();
                 })
             );

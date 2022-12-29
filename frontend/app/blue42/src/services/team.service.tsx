@@ -2,13 +2,14 @@ import {fromFetch} from 'rxjs/fetch';
 import {map, Subject} from 'rxjs';
 import { Team, TeamIcon } from '../interfaces/interface';
 import teamIconMapJson from '../assets/team-icons/team_icon_map.json';
-
+import {importFi} from '../ImportFi';
 
 type InitialState = {
     teams: Team[],
 }
 const subject = new Subject<InitialState>();
-const images = require.context('../assets/team-icons', true);
+const images = require.context('../assets/team-icons', true);// importFi.importFiles();
+console.log({"images":images})
 
 const headers = {
     "Content-type": "application/json"

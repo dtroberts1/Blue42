@@ -162,10 +162,10 @@ class ManageOdd extends React.Component{
                   {
                     this.state.updatingHeader &&
                     <React.Fragment>
-                      <div onClick={(evt => {this.saveEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div role="button" onClick={(evt => {this.saveEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FiSave />
                       </div>
-                      <div onClick={(evt => {this.cancelEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div role="button"  onClick={(evt => {this.cancelEditHeader(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FcCancel />
                       </div>
                     </React.Fragment>
@@ -173,7 +173,7 @@ class ManageOdd extends React.Component{
                   {
                     !this.state.updatingHeader &&
                     <React.Fragment>
-                      <div onClick={(evt => {this.clickedEditHeader(evt)})} tabIndex={1} style={{marginLeft: '0.85em'}}  className={styles.CardOddHeaderBtn}>
+                      <div role="button" onClick={(evt => {this.clickedEditHeader(evt)})} tabIndex={1} style={{marginLeft: '0.85em'}}  className={styles.CardOddHeaderBtn}>
                         <RiEditLine />
                       </div>
                     </React.Fragment>
@@ -217,10 +217,10 @@ class ManageOdd extends React.Component{
                   {
                     this.state.updatingValue && 
                     <React.Fragment>
-                      <div onClick={(evt => {this.saveEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div role="button" onClick={(evt => {this.saveEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FiSave />
                       </div>
-                      <div onClick={(evt => {this.cancelEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div role="button" onClick={(evt => {this.cancelEditValue(evt)})} style={{marginLeft: '0.35em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <FcCancel />
                       </div>
                     </React.Fragment>
@@ -228,7 +228,7 @@ class ManageOdd extends React.Component{
                   {
                     !this.state.updatingValue && 
                     <React.Fragment>
-                      <div onClick={(evt => {this.clickedEditValue(evt)})} style={{marginLeft: '0.85em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
+                      <div role="button" onClick={(evt => {this.clickedEditValue(evt)})} style={{marginLeft: '0.85em'}} tabIndex={1} className={styles.CardOddHeaderBtn}>
                         <RiEditLine />
                       </div>
                     </React.Fragment>

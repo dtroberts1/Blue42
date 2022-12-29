@@ -1,9 +1,66 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import SimAllEvents from './SimAllEvents';
+import AllEventsOverviewOddsCard from './AllEventsOverviewOddsCard';
 
-it('It should mount', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<SimAllEvents />, div);
-  ReactDOM.unmountComponentAtNode(div);
+const game = {
+  id: 1,
+  dateTime: '2024-02-02',
+  status: {
+    id: 1,
+    statusText: 'Scheduled',
+  },
+  season: 1,
+  seasonType: 1,
+  apiWeek: 1,
+  homeTeam: {
+    id: 1,
+    name: 'Test HomeTeam',
+    abbrev: 'THT',
+    venue: {
+      "id": 10,
+      "name": "Allegiant Stadium",
+      "capacity": 50000,
+      "city": "Paradise",
+      "mapCoordinates": null,
+      "countryCode": "USA"
+  },
+    imagePath: "data:image/png;base64,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",
+  },
+  awayTeam: {
+    id: 20,
+    name: "Los Angeles Rams                                  ",
+    abbrev: "LA",
+    venue: {
+        id: 19,
+        name: "SoFi Stadium",
+        capacity: 50000,
+        city: "Los Angeles",
+        mapCoordinates: null,
+        countryCode: "USA"
+    },
+    games: null,
+    imagePath: "data:image/png;base64,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"
+  },
+  allGameOdds: [],
+  oddCardMap : new Map(),
+};
+
+//const clickedOddsCard = jest.fn();
+//const oddCardIsEmpty = jest.fn();
+
+
+/*jest.mock("./AllEventsOverviewOddsCard");
+(AllEventsOverviewOddsCard).mockReturnValue(
+  <AllEventsOverviewOddsCard 
+  key={game.id} 
+  onClick={(e) => clickedOddsCard} 
+    compVisibility={(game.allGameOdds[0] ? true : false)}
+    isEmpty={oddCardIsEmpty(game, 2)}
+    odd={game.oddCardMap.get(2)}
+  />
+)
+*/
+it('It should mount', async () => {
+
+  
+
 });

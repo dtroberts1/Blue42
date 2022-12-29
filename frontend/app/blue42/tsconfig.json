@@ -105,5 +105,6 @@
     "src/**/*",
     "src/**/*.d.tsx",
     "src/**/*.tsx",
+    "importfi.js",
  ]
 }

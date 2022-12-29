@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import Sim from './Sim';
 
 it('It should mount', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Sim />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = ReactDOM.createRoot(div);
+  root.render(<Sim />);
 });

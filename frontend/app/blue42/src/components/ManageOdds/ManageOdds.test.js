@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import ManageOdds from './ManageOdds';
 
 it('It should mount', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<ManageOdds />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = ReactDOM.createRoot(div);
+  root.render(<ManageOdds />);
+
 });

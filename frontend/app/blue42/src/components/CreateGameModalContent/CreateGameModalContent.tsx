@@ -1,7 +1,7 @@
 import React, { ChangeEvent, LegacyRef }  from 'react';
 import './CreateGameModalContent.less';
 import styles from './CreateGameModalContent.less';
-import {GenericDropdown} from '../GenericDropdown/GenericDropdown';
+import GenericDropdown from '../GenericDropdown/GenericDropdown';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
@@ -363,7 +363,7 @@ export default class CreateGameModalContent extends React.Component{
               <span style={{position: 'relative'}} tabIndex={1} onClick={(evt) => {this.setState({editTimeMode: true})}} className={styles.ClockIcon}>
               <BsClock />
                 <div  
-                  style={{position: 'absolute', top: '-.48em', left: '-30px', zIndex: '1', visibility: (this.state.editTimeMode ? 'visible' : 'hidden')}}
+                  style={{position: 'absolute', top: '-.48em', left: '-30px', zIndex: '9', visibility: (this.state.editTimeMode ? 'visible' : 'hidden')}}
                   className={styles.TimeDropdown}>
                   <GenericDropdown 
                     data={hours}
